@@ -5,26 +5,36 @@
 #include <stdio.h>
 #include <unistd.h>
 
+#include "sp_io.h"
+
 typedef enum sp_status {
+    SP_STATUS_SPAWNING = 0,
     SP_STATUS_RUNNING,
     SP_STATUS_DEAD,
 } SP_Status;
 
 typedef struct sp_process {
-    pid_t pid;    // process id
-    char** argv;  // argv copied from options
-    // FILE* stdin;       // stdin of process
-    // FILE* stdout;      // stdout of process
-    // FILE* stderr;      // stderr of process
+    pid_t pid;         // process id
+    char** argv;       // argv copied from options
     SP_Status status;  // status of process
     // exitCode only valid if status == SP_STATUS_DEAD
     int exitCode;  // exit code of process (-N indicates terminated with signal N)
+    // If IOOptions specifies SP_IO_PIPE than this will
+    // be opened from the corresponding pipe ends
+    FILE* stdin;   // stdin of process
+    FILE* stdout;  // stdout of process
+    FILE* stderr;  // stderr of process
+    // char* stdoutBytes;
+    // char* stderrBytes;
 } SP_Process;
 
 typedef struct sp_options {
     char** argv;  // argv passed to process
     char* cwd;    // current working directory
     char** env;   // environment passed to execve
+    SP_IOOptions stdin;
+    SP_IOOptions stdout;
+    SP_IOOptions stderr;
 } SP_Options;
 
 // run and wait for process to finish
@@ -42,8 +52,8 @@ int sp_kill(SP_Process* process);
 // send signal to process
 int sp_signal(SP_Process* process, int signal);
 
-// close stdin of process
-// int sp_close(SP_Process* process);
+// close stdin of process if opened with a pipe.
+void sp_close(SP_Process* process);
 
 // wait for process to exit and set proc->exitCode
 int sp_wait(SP_Process* process);

@@ -3,3 +3,5 @@
 *.so
 .gdb_history
 subprocess
+.cache/
+compile_commands.json
