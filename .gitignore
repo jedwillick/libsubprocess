@@ -1,7 +1,7 @@
+build/
 *.d
 *.o
 *.so
-.gdb_history
-subprocess
 .cache/
+.gdb_history
 compile_commands.json

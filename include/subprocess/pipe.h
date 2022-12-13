@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-#include "sp_io.h"
+#include "subprocess/io.h"
 
 // Create a pipe if BYTES is specified it will write them to the newly created pipe.
 int sp_pipe_create(SP_IOOptions* opts);

@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 
-#include "sp_io.h"
+#include "subprocess/io.h"
 
 typedef enum sp_redirect_target {
     SP_REDIRECT_STDIN = STDIN_FILENO,

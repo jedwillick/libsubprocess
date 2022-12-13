@@ -1,21 +1,23 @@
 CC = gcc
-CFLAGS = -MMD -Wall -pedantic -std=gnu99
+CFLAGS := -std=gnu99 -MMD -Wall -pedantic -Iinclude/
 
-TARGET = subprocess
-SRCS := $(shell find src -name "*.c")
-OBJS := $(SRCS:.c=.o)
-DEPS := $(OBJS:.o=.d)
+TARGET = libsubprocess.so
+SRCS := $(wildcard src/*.c)
+OBJS := $(patsubst src/%.c,build/%.o, $(SRCS))
 
 .PHONY: all
 all: $(TARGET)
 
+$(TARGET): CFLAGS += -O3 -fPIC
+$(TARGET): LDFLAGS += -shared
 $(TARGET): $(OBJS)
-	$(CC) -o $@ $^
+	$(CC) $(LDFLAGS) $(GCOV) -o $@ $(LDLIBS) $^
 
-$(OBJS): CFLAGS += -O3
-$(OBJS): $(SRCS)
+build/%.o: src/%.c
+	mkdir -p build/
+	$(CC) $(CFLAGS) $(GCOV) -c -o $@ $<
 
--include $(DEPS)
+-include $(OBJS:.o=.d)
 
 .PHONY: debug
 debug: CFLAGS += -g -Og
