@@ -5,6 +5,12 @@ TARGET = libsubprocess.so
 SRCS := $(wildcard src/*.c)
 OBJS := $(patsubst src/%.c,build/%.o, $(SRCS))
 
+TEST_TARGET = test/run-tests
+TEST_SRCS := $(wildcard test/*.c)
+TEST_OBJS := $(patsubst test/%.c,build/%.o, $(TEST_SRCS))
+
+TEST_OPTS ?=
+
 .PHONY: all
 all: $(TARGET)
 
@@ -23,6 +29,34 @@ build/%.o: src/%.c
 debug: CFLAGS += -g -Og
 debug: clean $(TARGET)
 
+.PHONY: criterion
+criterion:
+	if [ ! -d test/criterion ]; then \
+		mkdir -p test/criterion; \
+		curl -Lo- https://github.com/Snaipe/Criterion/releases/download/v2.4.1/criterion-2.4.1-linux-x86_64.tar.xz \
+			| tar -x --xz --strip-components=1 -C test/criterion; \
+	fi
+
+.PHONY: test
+test: $(TARGET) criterion $(TEST_TARGET)
+	LD_LIBRARY_PATH=.:$${LD_LIBRARY_PATH} $(VALGRIND) ./$(TEST_TARGET) $(TEST_OPTS)
+
+$(TEST_TARGET): LDFLAGS += -Ltest/criterion/lib -L.
+$(TEST_TARGET): LDLIBS += -lcriterion -lsubprocess
+$(TEST_TARGET): CFLAGS += -g -Og -Itest/criterion/include -Wno-unused-value
+$(TEST_TARGET): $(TEST_OBJS)
+	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
+
+build/%.o: test/%.c
+	mkdir -p build/
+	$(CC) $(CFLAGS) -c -o $@ $<
+
 .PHONY: clean
 clean:
-	rm -f $(OBJS)
+	rm -f build/* $(TARGET) $(TEST_TARGET)
+
+# Put this last as the filter breaks treesitter highlights
+.PHONY: memcheck
+memcheck: VALGRIND = valgrind -q --trace-children=yes
+memcheck: TEST_OPTS += --filter "!(force/sp_signal|force/sp_terminate)"
+memcheck: test

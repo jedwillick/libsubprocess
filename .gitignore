@@ -1,7 +1,11 @@
-build/
 *.d
 *.o
 *.so
+build/
+
 .cache/
 .gdb_history
 compile_commands.json
+
+test/criterion/
+test/run-tests
