@@ -11,6 +11,9 @@ TEST_OBJS := $(patsubst test/%.c,build/%.o, $(TEST_SRCS))
 
 TEST_OPTS ?=
 
+COVERAGE_DIR=coverage
+COVERAGE_INFO=coverage.info
+
 .PHONY: all
 all: $(TARGET)
 
@@ -51,9 +54,26 @@ build/%.o: test/%.c
 	mkdir -p build/
 	$(CC) $(CFLAGS) -c -o $@ $<
 
+.PHONY: coverage
+coverage: GCOV = --coverage
+coverage: TEST_OPTS += --always-succeed
+coverage: test
+	lcov --capture --directory . --output-file $(COVERAGE_INFO)
+	lcov --remove $(COVERAGE_INFO) '/usr/*' --output-file $(COVERAGE_INFO)
+	lcov --list $(COVERAGE_INFO)
+
+.PHONY: coverage-html
+coverage-html: coverage
+	genhtml $(COVERAGE_INFO) --output-directory $(COVERAGE_DIR)
+	python3 -m http.server --bind localhost --directory $(COVERAGE_DIR)
+
 .PHONY: clean
 clean:
 	rm -f build/* $(TARGET) $(TEST_TARGET)
+
+.PHONY: clean-coverage
+clean-coverage:
+	rm -rf $(COVERAGE_INFO) $(COVERAGE_DIR)
 
 # Put this last as the filter breaks treesitter highlights
 .PHONY: memcheck
