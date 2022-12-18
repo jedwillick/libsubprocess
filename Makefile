@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS := -std=gnu99 -MMD -Wall -pedantic -Iinclude/
+CFLAGS := -std=gnu99 -MMD -Wall -pedantic -D_GNU_SOURCE -Iinclude/
 
 TARGET = libsubprocess.so
 SRCS := $(wildcard src/*.c)
@@ -23,7 +23,7 @@ $(TARGET): $(OBJS)
 	$(CC) $(LDFLAGS) $(GCOV) -o $@ $(LDLIBS) $^
 
 build/%.o: src/%.c
-	mkdir -p build/
+	@mkdir -p build/
 	$(CC) $(CFLAGS) $(GCOV) -c -o $@ $<
 
 -include $(OBJS:.o=.d)
@@ -34,7 +34,8 @@ debug: clean $(TARGET)
 
 .PHONY: criterion
 criterion:
-	if [ ! -d test/criterion ]; then \
+	@if [ ! -d test/criterion ]; then \
+		echo "Installing test framework github.com/Snaipe/Criterion ..."; \
 		mkdir -p test/criterion; \
 		curl -Lo- https://github.com/Snaipe/Criterion/releases/download/v2.4.1/criterion-2.4.1-linux-x86_64.tar.xz \
 			| tar -x --xz --strip-components=1 -C test/criterion; \
@@ -42,7 +43,7 @@ criterion:
 
 .PHONY: test
 test: $(TARGET) criterion $(TEST_TARGET)
-	LD_LIBRARY_PATH=.:$${LD_LIBRARY_PATH} $(VALGRIND) ./$(TEST_TARGET) $(TEST_OPTS)
+	LD_LIBRARY_PATH=.:test/criterion/lib:$${LD_LIBRARY_PATH} $(VALGRIND) ./$(TEST_TARGET) $(TEST_OPTS)
 
 $(TEST_TARGET): LDFLAGS += -Ltest/criterion/lib -L.
 $(TEST_TARGET): LDLIBS += -lcriterion -lsubprocess
@@ -51,8 +52,10 @@ $(TEST_TARGET): $(TEST_OBJS)
 	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
 build/%.o: test/%.c
-	mkdir -p build/
+	@mkdir -p build/
 	$(CC) $(CFLAGS) -c -o $@ $<
+
+-include $(TEST_OBJS:.o=.d)
 
 .PHONY: coverage
 coverage: GCOV = --coverage
@@ -80,3 +83,4 @@ clean-coverage:
 memcheck: VALGRIND = valgrind -q --trace-children=yes
 memcheck: TEST_OPTS += --filter "!(force/sp_signal|force/sp_terminate)"
 memcheck: test
+
