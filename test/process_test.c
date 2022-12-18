@@ -1,56 +1,52 @@
-#include "subprocess/process.h"
-
-#include <criterion/criterion.h>
-#include <criterion/new/assert.h>
 #include <signal.h>
 #include <unistd.h>
 
-#include "subprocess/io.h"
+#include "test_common.h"
 
-SP_Process* proc = NULL;
-SP_Options* opts = NULL;
+static SP_Process* proc;
+static SP_Opts* opts;
 
-void teardown(void) {
+static void teardown(void) {
     sp_destroy(proc);
     free(opts);
 }
 
-void setup_force(void) {
-    proc = sp_open(SP_ARGV("cat"), SP_OPTS(.stdin = SP_IO_OPTS_PIPE()));
-    cr_assert(not(zero(ptr, proc)));
+static void setup_force(void) {
+    proc = sp_open(SP_ARGV("cat"), SP_OPTS(.stdin = SP_REDIR_PIPE()));
 }
 
 TestSuite(force, .timeout = 10, .init = setup_force, .fini = teardown);
 
 Test(force, sp_kill) {
     cr_assert(zero(int, sp_kill(proc)));
-    cr_assert(zero(int, sp_wait(proc)));
-    cr_assert(eq(int, proc->exitCode, -SIGKILL));
+    cr_assert(eq(int, sp_wait(proc), SIGKILL + SP_SIGNAL_OFFSET));
+    cr_assert(eq(int, proc->exitCode, SIGKILL + SP_SIGNAL_OFFSET));
 }
 
 Test(force, sp_terminate) {
     cr_assert(zero(int, sp_terminate(proc)));
-    cr_assert(zero(int, sp_wait(proc)));
-    cr_assert(eq(int, proc->exitCode, -SIGTERM));
+    cr_assert(eq(int, sp_wait(proc), SIGTERM + SP_SIGNAL_OFFSET));
+    cr_assert(eq(int, proc->exitCode, SIGTERM + SP_SIGNAL_OFFSET));
 }
 
 Test(force, sp_signal) {
     cr_assert(zero(int, sp_signal(proc, SIGINT)));
-    cr_assert(zero(int, sp_wait(proc)));
-    cr_assert(eq(int, proc->exitCode, -SIGINT));
+    cr_assert(eq(int, sp_wait(proc), SIGINT + SP_SIGNAL_OFFSET));
+    cr_assert(eq(int, proc->exitCode, SIGINT + SP_SIGNAL_OFFSET));
 
     // Should error
     cr_assert(not(zero(int, sp_signal(NULL, SIGINT))));
     cr_assert(not(zero(int, sp_signal(proc, SIGINT))));
 
-    cr_assert(eq(int, proc->exitCode, -SIGINT));
+    cr_assert(eq(int, proc->exitCode, SIGINT + SP_SIGNAL_OFFSET));
 }
 
 Test(force, sp_poll) {
-    cr_assert(not(zero(int, sp_poll(proc))));
+    cr_assert(eq(int, sp_poll(proc), -1));
     sp_kill(proc);
     usleep(1000);
-    cr_assert(zero(int, sp_poll(proc)));
+    cr_assert(eq(int, sp_poll(proc), SIGKILL + SP_SIGNAL_OFFSET));
+    cr_assert(eq(int, proc->exitCode, SIGKILL + SP_SIGNAL_OFFSET));
 }
 
 Test(force, sp_close) {
@@ -61,11 +57,11 @@ Test(force, sp_close) {
     cr_assert(zero(int, proc->exitCode));
 }
 
-void setup_fails(void) {
+static void setup_fails(void) {
     opts = malloc(sizeof *opts);
-    *opts = (SP_Options){
-            .stderr = SP_IO_OPTS_DEVNULL(),
-            .redirectOrder = {2, 1, 0},
+    *opts = (SP_Opts){
+        .stderr = SP_REDIR_DEVNULL(),
+        .redirOrder = {2, 1, 0},
     };
 }
 
@@ -88,25 +84,25 @@ Test(fails, not_executable) {
 }
 
 Test(fails, bad_fd) {
-    opts->stdout = SP_IO_OPTS_FD(666);
+    opts->stdout = SP_REDIR_FD(666);
     proc = sp_run(SP_ARGV("ls"), opts);
     cr_assert(eq(int, proc->exitCode, SP_EXIT_NOT_EXECUTE));
 }
 
 Test(fails, bad_path) {
-    opts->stdin = SP_IO_OPTS_PATH("NOPE");
+    opts->stdin = SP_REDIR_PATH("NOPE");
     proc = sp_run(SP_ARGV("ls"), opts);
     cr_assert(eq(int, proc->exitCode, SP_EXIT_NOT_EXECUTE));
 }
 
 Test(fails, null_path) {
-    opts->stdin = SP_IO_OPTS_PATH(NULL);
+    opts->stdin = SP_REDIR_PATH(NULL);
     proc = sp_run(SP_ARGV("ls"), opts);
     cr_assert(eq(int, proc->exitCode, SP_EXIT_NOT_EXECUTE));
 }
 
 Test(fails, null_file) {
-    opts->stdout = SP_IO_OPTS_FILE(NULL);
+    opts->stdout = SP_REDIR_FILE(NULL);
     proc = sp_run(SP_ARGV("ls"), opts);
     cr_assert(eq(int, proc->exitCode, SP_EXIT_NOT_EXECUTE));
 }

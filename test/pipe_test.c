@@ -1,45 +1,58 @@
 #include "subprocess/pipe.h"
 
-#include <criterion/criterion.h>
-#include <criterion/internal/test.h>
-#include <criterion/new/assert.h>
+#include <errno.h>
 #include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
 
-#include "subprocess/io.h"
+#include "subprocess/redirect.h"
+#include "test_common.h"
 
 TestSuite(pipe, .timeout = 2);
 
 Test(pipe, close_pipe) {
-    SP_IOOptions opts = SP_IO_OPTS_PIPE();
-    cr_assert(zero(sp_pipe_create(&opts)));
-    sp_pipe_close(opts.value.pipeFd);
-    cr_assert(eq(int, fcntl(opts.value.pipeFd[0], F_GETFD), -1));
-    cr_assert(eq(int, fcntl(opts.value.pipeFd[1], F_GETFD), -1));
+    SP_RedirOpt opt = SP_REDIR_PIPE();
+    cr_assert(zero(sp_pipe_create(&opt, false)));
+    sp_pipe_close(opt.value.pipeFd);
+    cr_assert(eq(int, fcntl(opt.value.pipeFd[0], F_GETFD), -1));
+    cr_assert(eq(int, fcntl(opt.value.pipeFd[1], F_GETFD), -1));
 }
 
 Test(pipe, create_pipe) {
-    SP_IOOptions opts = SP_IO_OPTS_PIPE();
-    cr_assert(zero(sp_pipe_create(&opts)));
+    SP_RedirOpt opt = SP_REDIR_PIPE();
+    cr_assert(zero(sp_pipe_create(&opt, false)));
     // Check for FD_CLOEXEC
-    cr_assert(eq(int, fcntl(opts.value.pipeFd[0], F_GETFD), FD_CLOEXEC));
-    cr_assert(eq(int, fcntl(opts.value.pipeFd[1], F_GETFD), FD_CLOEXEC));
+    cr_assert(eq(int, fcntl(opt.value.pipeFd[0], F_GETFD), FD_CLOEXEC));
+    cr_assert(eq(int, fcntl(opt.value.pipeFd[1], F_GETFD), FD_CLOEXEC));
 
     char* input = "sent through the pipe!";
     int size = strlen(input) + 1;  // Write null byte
-    cr_assert(eq(int, write(opts.value.pipeFd[1], input, size), size));
+    cr_assert(eq(int, write(opt.value.pipeFd[1], input, size), size));
     char output[size];
-    cr_assert(eq(int, read(opts.value.pipeFd[0], output, size), size));
+    cr_assert(eq(int, read(opt.value.pipeFd[0], output, size), size));
     cr_assert(eq(str, input, output));
 }
 
 Test(pipe, create_pipe_with_bytes) {
     char* input = "sent through the pipe!";
     int size = strlen(input) + 1;  //write null byte
-    SP_IOOptions opts = SP_IO_OPTS_BYTES(input, size);
-    cr_assert(zero(sp_pipe_create(&opts)));
+    SP_RedirOpt opt = SP_REDIR_BYTES(input, size);
+    cr_assert(zero(sp_pipe_create(&opt, false)));
     char output[size];
-    cr_assert(eq(int, read(opts.value.pipeFd[0], output, size), size));
+    cr_assert(eq(int, read(opt.value.pipeFd[0], output, size), size));
     cr_assert(eq(str, input, output));
+}
+
+Test(pipe, create_non_blocking) {
+    SP_RedirOpt opt = SP_REDIR_PIPE();
+    cr_assert(zero(int, sp_pipe_create(&opt, true)));
+
+    char out;
+    cr_assert(eq(int, read(opt.value.pipeFd[0], &out, 1), -1));
+    cr_assert(any(eq(int, errno, EAGAIN), eq(int, errno, EWOULDBLOCK)),
+        "read: %s: %s", strerrorname_np(errno), strerror(errno));
+    char in = 'x';
+    cr_assert(eq(int, write(opt.value.pipeFd[1], &in, 1), 1));
+    cr_assert(eq(int, read(opt.value.pipeFd[0], &out, 1), 1));
+    cr_assert(eq(chr, out, in));
 }

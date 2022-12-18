@@ -41,26 +41,25 @@ int sp_pipe_close(int fd[2]) {
 // and close the end.
 // Called BEFORE fork()
 // If opts is not setup correctly silently ignore. TODO: fix this
-int sp_pipe_create(SP_IOOptions* opts) {
-    if (!opts || !(opts->type == SP_IO_PIPE || opts->type == SP_IO_BYTES)) {
+int sp_pipe_create(SP_RedirOpt* opt, bool nonBlocking) {
+    if (!opt || !(opt->type == SP_REDIR_PIPE || opt->type == SP_REDIR_BYTES)) {
         return 0;
     }
+    int flags = O_CLOEXEC | (nonBlocking ? O_NONBLOCK : 0);
     int fd[2];
-    if (pipe(fd) < 0) {
+    if (pipe2(fd, flags) < 0) {
         return -1;
     }
-    fcntl(fd[0], F_SETFD, FD_CLOEXEC);
-    fcntl(fd[1], F_SETFD, FD_CLOEXEC);
-    if (opts->type == SP_IO_BYTES) {  // TODO: need better solution
-        if (write(fd[1], opts->value.bytes, opts->size) < 0) {
+    if (opt->type == SP_REDIR_BYTES) {  // TODO: need better solution
+        if (write(fd[1], opt->value.bytes, opt->size) < 0) {
             int tmpErrno = errno;
-            sp_pipe_close(opts->value.pipeFd);
+            sp_pipe_close(opt->value.pipeFd);
             errno = tmpErrno;
             return -1;
         }
         sp_fd_close(&fd[1]);
     }
-    opts->value.pipeFd[0] = fd[0];
-    opts->value.pipeFd[1] = fd[1];
+    opt->value.pipeFd[0] = fd[0];
+    opt->value.pipeFd[1] = fd[1];
     return 0;
 }

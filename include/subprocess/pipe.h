@@ -2,11 +2,12 @@
 #define SP_PIPE_H
 
 #include <stdbool.h>
+#include <stdio.h>
 
-#include "subprocess/io.h"
+#include "subprocess/redirect.h"
 
 // Create a pipe if BYTES is specified it will write them to the newly created pipe.
-int sp_pipe_create(SP_IOOptions* opts);
+int sp_pipe_create(SP_RedirOpt* opt, bool nonBlocking);
 
 // close pipe
 int sp_pipe_close(int fd[2]);

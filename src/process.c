@@ -31,40 +31,39 @@ static void safe_fclose(FILE* file) {
     }
 }
 
-static int sp_create_pipes(SP_Options* opts) {
-    int cond = !sp_pipe_create(&opts->stdin) &&
-               !sp_pipe_create(&opts->stdout) &&
-               !sp_pipe_create(&opts->stderr);
+static int sp_create_pipes(SP_Opts* opts) {
+    int cond = !sp_pipe_create(&opts->stdin, opts->nonBlockingPipes) &&
+               !sp_pipe_create(&opts->stdout, opts->nonBlockingPipes) &&
+               !sp_pipe_create(&opts->stderr, opts->nonBlockingPipes);
     return cond ? 0 : -1;
 }
 
-static void check_redirect_order(SP_RedirectTarget order[3]) {
+static void check_redirect_order(SP_RedirTarget order[3]) {
     if (order[0] == order[1] || order[0] == order[2] || order[1] == order[2]) {
-        order[0] = SP_REDIRECT_STDIN;
-        order[1] = SP_REDIRECT_STDOUT;
-        order[2] = SP_REDIRECT_STDERR;
+        order[0] = SP_STDIN_FILENO;
+        order[1] = SP_STDOUT_FILENO;
+        order[2] = SP_STDERR_FILENO;
     }
 }
 
-static SP_IOOptions* sp_fd_to_io_opts(SP_Options* opts,
-        SP_RedirectTarget target) {
+static SP_RedirOpt* sp_fd_to_redir_opts(SP_Opts* opts, SP_RedirTarget target) {
     switch (target) {
-        case SP_REDIRECT_STDIN:
+        case SP_STDIN_FILENO:
             return &opts->stdin;
-        case SP_REDIRECT_STDOUT:
+        case SP_STDOUT_FILENO:
             return &opts->stdout;
-        case SP_REDIRECT_STDERR:
+        case SP_STDERR_FILENO:
             return &opts->stderr;
         default:
             return NULL;
     }
 }
 
-static int sp_redirect_all(SP_Options* opts) {
-    check_redirect_order(opts->redirectOrder);
-    for (int i = 0; i < SP_SIZE_FIXED_ARR(opts->redirectOrder); i++) {
-        SP_IOOptions* ioOpts = sp_fd_to_io_opts(opts, opts->redirectOrder[i]);
-        int err = sp_redirect(ioOpts, opts->redirectOrder[i]);
+static int sp_redirect_all(SP_Opts* opts) {
+    check_redirect_order(opts->redirOrder);
+    for (int i = 0; i < SP_SIZE_FIXED_ARR(opts->redirOrder); i++) {
+        SP_RedirOpt* redirOpt = sp_fd_to_redir_opts(opts, opts->redirOrder[i]);
+        int err = sp_redirect(redirOpt, opts->redirOrder[i]);
         if (err < 0) {
             return err;
         }
@@ -73,7 +72,7 @@ static int sp_redirect_all(SP_Options* opts) {
 }
 
 // Child exec handler
-static int sp_child_exec(char** argv, SP_Options* opts) {
+static int sp_child_exec(char** argv, SP_Opts* opts) {
     if (opts && sp_redirect_all(opts) < 0) {
         // Error output is done in redirect.c since it has access to
         // specific details.
@@ -104,20 +103,20 @@ static int sp_child_exec(char** argv, SP_Options* opts) {
 // fdopen the correct ends of the pipes and close the other ends.
 // Should be called in parent after fork()
 // TODO: remove dupe code
-static int sp_fdopen_all(SP_Process* proc, SP_Options* opts) {
-    if (opts->stdin.type == SP_IO_PIPE) {
+static int sp_fdopen_all(SP_Process* proc, SP_Opts* opts) {
+    if (opts->stdin.type == SP_REDIR_PIPE) {
         proc->stdin = sp_pipe_fdopen(opts->stdin.value.pipeFd, true);
         if (!proc->stdin) {
             return -1;
         }
     }
-    if (opts->stdout.type == SP_IO_PIPE) {
+    if (opts->stdout.type == SP_REDIR_PIPE) {
         proc->stdout = sp_pipe_fdopen(opts->stdout.value.pipeFd, false);
         if (!proc->stdout) {
             return -1;
         }
     }
-    if (opts->stderr.type == SP_IO_PIPE) {
+    if (opts->stderr.type == SP_REDIR_PIPE) {
         proc->stderr = sp_pipe_fdopen(opts->stderr.value.pipeFd, false);
         if (!proc->stderr) {
             return -1;
@@ -127,7 +126,7 @@ static int sp_fdopen_all(SP_Process* proc, SP_Options* opts) {
 }
 
 // run and wait for process to finish
-SP_Process* sp_run(char** argv, SP_Options* opts) {
+SP_Process* sp_run(char** argv, SP_Opts* opts) {
     SP_Process* proc = sp_open(argv, opts);
     if (!proc) {
         return NULL;
@@ -140,7 +139,7 @@ SP_Process* sp_run(char** argv, SP_Options* opts) {
 }
 
 // open a new process
-SP_Process* sp_open(char** argv, SP_Options* opts) {
+SP_Process* sp_open(char** argv, SP_Opts* opts) {
     if (!argv || !argv[0]) {
         errno = EINVAL;
         return NULL;
@@ -159,6 +158,7 @@ SP_Process* sp_open(char** argv, SP_Options* opts) {
             _exit(sp_child_exec(argv, opts));
         default:  // PARENT
             proc->status = SP_STATUS_RUNNING;
+            proc->exitCode = -1;
             if (opts && sp_fdopen_all(proc, opts) < 0) {
                 sp_destroy(proc);
                 return NULL;
@@ -199,9 +199,12 @@ void sp_close(SP_Process* proc) {
 // return 0 if successfully reaped proc,
 // return 1 if still running
 int sp_wait_opts(SP_Process* proc, int options) {
-    if (!proc || proc->status == SP_STATUS_DEAD) {
+    if (!proc) {
         errno = EINVAL;
         return -1;
+    }
+    if (proc->status == SP_STATUS_DEAD) {
+        return proc->exitCode;
     }
     int stat;
     int pid = waitpid(proc->pid, &stat, options);
@@ -211,10 +214,10 @@ int sp_wait_opts(SP_Process* proc, int options) {
     if (WIFEXITED(stat)) {
         proc->exitCode = WEXITSTATUS(stat);
     } else if (WIFSIGNALED(stat)) {
-        proc->exitCode = -WTERMSIG(stat);
+        proc->exitCode = WTERMSIG(stat) + SP_SIGNAL_OFFSET;
     }
     proc->status = SP_STATUS_DEAD;
-    return 0;
+    return proc->exitCode;
 }
 
 // wait for process to exit and set proc->exitCode
