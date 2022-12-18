@@ -1,1 +1,14 @@
-subprocess
+*.d
+*.o
+*.so
+*.out
+build/
+
+.cache/
+.gdb_history
+compile_commands.json
+
+test/criterion/
+test/run-tests
+coverage.info
+coverage/
