@@ -14,6 +14,8 @@ TEST_OPTS ?=
 COVERAGE_DIR=coverage
 COVERAGE_INFO=coverage.info
 
+INSTALL_PREFIX ?= /usr/local
+
 .PHONY: all
 all: $(TARGET)
 
@@ -81,6 +83,18 @@ clean-coverage:
 .PHONY: format
 format:
 	clang-format -i --verbose $$(git ls-files | grep -E "*\.[ch]")
+
+.PHONY: install
+install: $(TARGET)
+	mkdir -p $(INSTALL_PREFIX)/lib
+	mkdir -p $(INSTALL_PREFIX)/include
+	cp $(TARGET) $(INSTALL_PREFIX)/lib
+	cp -r include/subprocess $(INSTALL_PREFIX)/include
+
+.PHONY: uninstall
+uninstall:
+	rm -f $(INSTALL_PREFIX)/lib/$(TARGET)
+	rm -rf $(INSTALL_PREFIX)/include/subprocess
 
 # Put this last as the filter breaks treesitter highlights
 .PHONY: memcheck
