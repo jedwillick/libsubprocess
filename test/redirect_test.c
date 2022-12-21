@@ -46,11 +46,11 @@ Test(redir, in_out_path) {
 Test(redir, append) {
     unlink("test/append.out");
     proc1 = sp_run(SP_ARGV("echo", "Line 1"),
-        SP_OPTS(.stdout = SP_REDIR_PATH("test/append.out")));
+                   SP_OPTS(.stdout = SP_REDIR_PATH("test/append.out")));
     cr_assert(zero(int, proc1->exitCode));
     sp_destroy(proc1);
     proc1 = sp_run(SP_ARGV("echo", "Line 2"),
-        SP_OPTS(.stdout = SP_REDIR_APPEND("test/append.out")));
+                   SP_OPTS(.stdout = SP_REDIR_APPEND("test/append.out")));
     cr_assert(zero(int, proc1->exitCode));
     diff_files("test/append.in", "test/append.out");
 }

@@ -35,7 +35,7 @@ Test(pipe, create_pipe) {
 
 Test(pipe, create_pipe_with_bytes) {
     char* input = "sent through the pipe!";
-    int size = strlen(input) + 1;  //write null byte
+    int size = strlen(input) + 1;  // write null byte
     SP_RedirOpt opt = SP_REDIR_BYTES(input, size);
     cr_assert(zero(sp_pipe_create(&opt, false)));
     char output[size];
@@ -50,7 +50,7 @@ Test(pipe, create_non_blocking) {
     char out;
     cr_assert(eq(int, read(opt.value.pipeFd[0], &out, 1), -1));
     cr_assert(any(eq(int, errno, EAGAIN), eq(int, errno, EWOULDBLOCK)),
-        "read: %s: %s", strerrorname_np(errno), strerror(errno));
+              "read: %s: %s", strerrorname_np(errno), strerror(errno));
     char in = 'x';
     cr_assert(eq(int, write(opt.value.pipeFd[1], &in, 1), 1));
     cr_assert(eq(int, read(opt.value.pipeFd[0], &out, 1), 1));

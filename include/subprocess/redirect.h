@@ -12,8 +12,8 @@ typedef enum sp_redir_target {
 
 typedef enum sp_redir_type {
     SP_REDIR_INHERIT = 0,  // Default, inherit from parent.
-    SP_REDIR_PATH,         // Redirect from/to to the file named filename
     SP_REDIR_APPEND,  // Append output. If used on stdin it is the same as SP_REDIR_PATH
+    SP_REDIR_PATH,     // Redirect from/to to the file named filename
     SP_REDIR_DEVNULL,  // Redirect to /dev/null
     SP_REDIR_FD,       // Redirect from/to the given fd
     SP_REDIR_PIPE,  // Redirect from/to a pipe connected to parent that will be opened as a FILE*.

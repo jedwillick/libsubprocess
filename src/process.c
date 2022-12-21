@@ -48,14 +48,14 @@ static void check_redirect_order(SP_RedirTarget order[3]) {
 
 static SP_RedirOpt* sp_fd_to_redir_opts(SP_Opts* opts, SP_RedirTarget target) {
     switch (target) {
-        case SP_STDIN_FILENO:
-            return &opts->stdin;
-        case SP_STDOUT_FILENO:
-            return &opts->stdout;
-        case SP_STDERR_FILENO:
-            return &opts->stderr;
-        default:
-            return NULL;
+    case SP_STDIN_FILENO:
+        return &opts->stdin;
+    case SP_STDOUT_FILENO:
+        return &opts->stdout;
+    case SP_STDERR_FILENO:
+        return &opts->stderr;
+    default:
+        return NULL;
     }
 }
 
@@ -89,14 +89,14 @@ static int sp_child_exec(char** argv, SP_Opts* opts) {
     }
     SP_ERROR_MSG("exec: %s", argv[0]);
     switch (errno) {
-        case EISDIR:
-        case EACCES:
-        case ELIBBAD:
-        case ENOEXEC:
-        case EIO:
-            return SP_EXIT_NOT_EXECUTE;
-        default:
-            return SP_EXIT_NOT_FOUND;
+    case EISDIR:
+    case EACCES:
+    case ELIBBAD:
+    case ENOEXEC:
+    case EIO:
+        return SP_EXIT_NOT_EXECUTE;
+    default:
+        return SP_EXIT_NOT_FOUND;
     }
 }
 
@@ -150,20 +150,23 @@ SP_Process* sp_open(char** argv, SP_Opts* opts) {
         return NULL;
     }
     proc->pid = fork();
+    int err;
     switch (proc->pid) {
-        case -1:  // FORK ERROR
+    case -1:  // FORK ERROR
+        sp_destroy(proc);
+        return NULL;
+    case 0:  // CHILD
+        err = sp_child_exec(argv, opts);
+        sp_destroy(proc);
+        _exit(err);
+    default:  // PARENT
+        proc->status = SP_STATUS_RUNNING;
+        proc->exitCode = -1;
+        if (opts && sp_fdopen_all(proc, opts) < 0) {
             sp_destroy(proc);
             return NULL;
-        case 0:  // CHILD
-            _exit(sp_child_exec(argv, opts));
-        default:  // PARENT
-            proc->status = SP_STATUS_RUNNING;
-            proc->exitCode = -1;
-            if (opts && sp_fdopen_all(proc, opts) < 0) {
-                sp_destroy(proc);
-                return NULL;
-            }
-            proc->argv = dupe_array(argv);
+        }
+        proc->argv = dupe_array(argv);
     }
     return proc;
 }

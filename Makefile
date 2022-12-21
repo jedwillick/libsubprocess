@@ -78,9 +78,13 @@ clean:
 clean-coverage:
 	rm -rf $(COVERAGE_INFO) $(COVERAGE_DIR)
 
+.PHONY: format
+format:
+	clang-format -i --verbose $$(git ls-files | grep -E "*\.[ch]")
+
 # Put this last as the filter breaks treesitter highlights
 .PHONY: memcheck
-memcheck: VALGRIND = valgrind -q --trace-children=yes
+memcheck: VALGRIND = valgrind -q --leak-check=full --trace-children=yes --trace-children-skip="/usr/bin/*" --suppressions=valgrind.supp
 memcheck: TEST_OPTS += --filter "!(force/sp_signal|force/sp_terminate)"
 memcheck: test
 
