@@ -23,10 +23,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Install Valgrind
+        run: sudo apt install valgrind
       - name: Valgrind Memcheck
         run: |
-          sudo apt install valgrind
-          ! make memcheck 2>&1 | grep -E "(==[0-9]+==|FAIL|Failing: [1-9]+)"
+          if make memcheck 2>&1 | grep -E "==[0-9]+==" ; then
+            printf "\n[\x1B[1;31m FAILED MEMCHECK \x1B[0m]\n"
+            exit 1
+          else
+            printf "\n[\x1B[1;32m PASSED MEMCHECK \x1B[0m]\n"
+          fi
 
   lint:
     runs-on: ubuntu-latest
