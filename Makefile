@@ -108,4 +108,8 @@ uninstall:
 	rm -f $(INSTALL_PREFIX)/lib/$(TARGET)
 	rm -rf $(INSTALL_PREFIX)/include/subprocess
 
+.PHONY: bear
+bear: clean
+	bear -- $(MAKE) all
 
+subprocess: subprocess.c $(SRCS)
