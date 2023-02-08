@@ -1,5 +1,6 @@
 CC = gcc
 CFLAGS := -std=gnu99 -MMD -Wall -pedantic -D_GNU_SOURCE -Iinclude/
+DEBUG_CFLAGS = -g -Og -DDEBUG
 
 TARGET = libsubprocess.so
 SRCS := $(wildcard src/*.c)
@@ -8,19 +9,19 @@ OBJS := $(patsubst src/%.c,build/%.o, $(SRCS))
 TEST_TARGET = test/run-tests
 TEST_SRCS := $(wildcard test/*_test.c)
 TEST_OBJS := $(patsubst test/%.c,build/%.o, $(TEST_SRCS))
-
 TEST_OPTS ?=
+
+VALGRIND = valgrind -s --leak-check=full --show-leak-kinds=all --trace-children=yes --trace-children-skip="/usr/bin/*"
+MEMCHECK_TARGET = test/memcheck
+TARGETS := $(TARGET) $(TEST_TARGET) $(MEMCHECK_TARGET)
 
 COVERAGE_DIR=coverage
 COVERAGE_INFO=coverage.info
 
 INSTALL_PREFIX ?= /usr/local
 
-DEBUG_CFLAGS = -g -Og -DDEBUG
-VALGRIND = valgrind -s --leak-check=full --show-leak-kinds=all --trace-children=yes --trace-children-skip="/usr/bin/*"
-
 .PHONY: all
-all: $(TARGET) $(TEST_TARGET)
+all: $(TARGETS)
 
 $(TARGET): CFLAGS += -O3 -fPIC
 $(TARGET): LDFLAGS += -shared
@@ -62,13 +63,13 @@ build/%.o: test/%.c
 
 -include $(TEST_OBJS:.o=.d)
 
-test/memcheck: CFLAGS += $(DEBUG_CFLAGS)
-test/memcheck: LDLIBS += -lsubprocess
-test/memcheck: LDFLAGS += -L.
-test/memcheck: test/memcheck.c
+$(MEMCHECK_TARGET): CFLAGS += $(DEBUG_CFLAGS)
+$(MEMCHECK_TARGET): LDLIBS += -lsubprocess
+$(MEMCHECK_TARGET): LDFLAGS += -L.
+$(MEMCHECK_TARGET): test/memcheck.c
 
 .PHONY: memcheck
-memcheck: test/memcheck
+memcheck: $(TARGET) $(MEMCHECK_TARGET)
 	LD_LIBRARY_PATH=.:$${LD_LIBRARY_PATH} $(VALGRIND) ./test/memcheck
 
 .PHONY: coverage
@@ -86,7 +87,7 @@ coverage-html: coverage
 
 .PHONY: clean
 clean:
-	rm -f build/* $(TARGET) $(TEST_TARGET)
+	rm -f build/* $(TARGETS)
 
 .PHONY: clean-coverage
 clean-coverage:
