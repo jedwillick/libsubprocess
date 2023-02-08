@@ -1,5 +1,5 @@
-#ifndef UTIL_TEST_H_
-#define UTIL_TEST_H_
+#ifndef UTIL_TEST_H
+#define UTIL_TEST_H
 
 #include <criterion/criterion.h>
 #include <criterion/new/assert.h>
@@ -21,4 +21,4 @@ SP_Process* assert_process_started(char* file, int line,
 void assert_file_contents(FILE* file, char* expected);
 void diff_files(char* f1, char* f2);
 
-#endif // UTIL_TEST_H_
+#endif  // UTIL_TEST_H
