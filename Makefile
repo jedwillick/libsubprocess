@@ -16,8 +16,11 @@ COVERAGE_INFO=coverage.info
 
 INSTALL_PREFIX ?= /usr/local
 
+DEBUG_CFLAGS = -g -Og -DDEBUG
+VALGRIND = valgrind -s --leak-check=full --show-leak-kinds=all --trace-children=yes --trace-children-skip="/usr/bin/*"
+
 .PHONY: all
-all: $(TARGET)
+all: $(TARGET) $(TEST_TARGET)
 
 $(TARGET): CFLAGS += -O3 -fPIC
 $(TARGET): LDFLAGS += -shared
@@ -31,7 +34,7 @@ build/%.o: src/%.c
 -include $(OBJS:.o=.d)
 
 .PHONY: debug
-debug: CFLAGS += -g -Og
+debug: CFLAGS += $(DEBUG_CFLAGS)
 debug: clean $(TARGET)
 
 .PHONY: criterion
@@ -45,11 +48,11 @@ criterion:
 
 .PHONY: test
 test: $(TARGET) criterion $(TEST_TARGET)
-	LD_LIBRARY_PATH=.:test/criterion/lib:$${LD_LIBRARY_PATH} $(VALGRIND) ./$(TEST_TARGET) $(TEST_OPTS)
+	LD_LIBRARY_PATH=.:test/criterion/lib:$${LD_LIBRARY_PATH} ./$(TEST_TARGET) $(TEST_OPTS)
 
 $(TEST_TARGET): LDFLAGS += -Ltest/criterion/lib -L.
 $(TEST_TARGET): LDLIBS += -lcriterion -lsubprocess
-$(TEST_TARGET): CFLAGS += -g -Og -Itest/criterion/include -Wno-unused-value
+$(TEST_TARGET): CFLAGS += -Itest/criterion/include -Wno-unused-value $(DEBUG_CFLAGS)
 $(TEST_TARGET): $(TEST_OBJS)
 	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
@@ -58,6 +61,15 @@ build/%.o: test/%.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 -include $(TEST_OBJS:.o=.d)
+
+test/memcheck: CFLAGS += $(DEBUG_CFLAGS)
+test/memcheck: LDLIBS += -lsubprocess
+test/memcheck: LDFLAGS += -L.
+test/memcheck: test/memcheck.c
+
+.PHONY: memcheck
+memcheck: test/memcheck
+	LD_LIBRARY_PATH=.:$${LD_LIBRARY_PATH} $(VALGRIND) ./test/memcheck
 
 .PHONY: coverage
 coverage: GCOV = --coverage
@@ -96,9 +108,4 @@ uninstall:
 	rm -f $(INSTALL_PREFIX)/lib/$(TARGET)
 	rm -rf $(INSTALL_PREFIX)/include/subprocess
 
-# Put this last as the filter breaks treesitter highlights
-.PHONY: memcheck
-memcheck: VALGRIND = valgrind -q --leak-check=full --trace-children=yes --trace-children-skip="/usr/bin/*" --suppressions=valgrind.supp
-memcheck: TEST_OPTS += --filter "!(force/sp_signal|force/sp_terminate)"
-memcheck: test
 

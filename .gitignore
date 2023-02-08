@@ -12,3 +12,4 @@ test/criterion/
 test/run-tests
 coverage.info
 coverage/
+test/memcheck

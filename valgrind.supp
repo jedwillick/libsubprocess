@@ -1,6 +1,0 @@
-{
-  ignore_criterion
-  Memcheck:Leak
-  obj:*/vgpreload_memcheck-amd64-linux.so
-  obj:*/libcriterion.so*
-}
