@@ -1,4 +1,4 @@
-#include "test_common.h"
+#include "util_test.h"
 
 void assert_file_contents(FILE* file, char* expected) {
     cr_assert(not(zero(ptr, file)));

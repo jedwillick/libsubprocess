@@ -6,7 +6,7 @@ SRCS := $(wildcard src/*.c)
 OBJS := $(patsubst src/%.c,build/%.o, $(SRCS))
 
 TEST_TARGET = test/run-tests
-TEST_SRCS := $(wildcard test/*.c)
+TEST_SRCS := $(wildcard test/*_test.c)
 TEST_OBJS := $(patsubst test/%.c,build/%.o, $(TEST_SRCS))
 
 TEST_OPTS ?=

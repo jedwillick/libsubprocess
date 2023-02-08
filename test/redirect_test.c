@@ -7,7 +7,7 @@
 
 #include "criterion/internal/new_asserts.h"
 #include "subprocess/process.h"
-#include "test_common.h"
+#include "util_test.h"
 
 static SP_Process* proc1;
 static SP_Process* proc2;

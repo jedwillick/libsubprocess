@@ -6,7 +6,7 @@
 #include <unistd.h>
 
 #include "subprocess/redirect.h"
-#include "test_common.h"
+#include "util_test.h"
 
 TestSuite(pipe, .timeout = 2);
 

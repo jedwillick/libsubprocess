@@ -1,7 +1,7 @@
 #include <signal.h>
 #include <unistd.h>
 
-#include "test_common.h"
+#include "util_test.h"
 
 static SP_Process* proc;
 static SP_Opts* opts;
