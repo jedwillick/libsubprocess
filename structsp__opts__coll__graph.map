@@ -1,0 +1,4 @@
+<map id="sp_opts" name="sp_opts">
+<area shape="rect" id="node1" title="A struct containing options when spawning a process." alt="" coords="21,124,93,151"/>
+<area shape="rect" id="node2" href="$structsp__redir__opt.html" title="Struct used to configure redirection." alt="" coords="5,5,108,32"/>
+</map>
