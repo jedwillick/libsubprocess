@@ -1,6 +1,9 @@
+#include "subprocess/process.h"
+
 #include <signal.h>
 #include <unistd.h>
 
+#include "subprocess/redirect.h"
 #include "util_test.h"
 
 static SP_Process* proc;
@@ -105,4 +108,45 @@ Test(fails, null_file) {
     opts->stdout = SP_REDIR_FILE(NULL);
     proc = sp_run(SP_ARGV("ls"), opts);
     cr_assert(eq(int, proc->exitCode, SP_EXIT_NOT_EXECUTE));
+}
+
+TestSuite(proc, .timeout = 10, .fini = teardown);
+Test(proc, closesFds) {
+    FILE* file = fopen("test/txt.in", "r");
+    cr_assert(not(zero(ptr, file)));
+    proc = sp_open(SP_ARGV("cat"), SP_OPTS(.inheritFds = false));
+    usleep(500);
+    char buf[256];
+    snprintf(buf, 256, "%d", proc->pid);
+    SP_Process* proc2 = sp_run(SP_ARGV("./test/dump-fds.sh", buf),
+                               SP_OPTS(.stdout = SP_REDIR_PIPE()));
+    sp_close(proc);
+    while (fgets(buf, 256, proc2->stdout)) {
+        cr_assert(le(int, atoi(buf), STDERR_FILENO));
+    }
+    cr_assert(not(zero(ptr, fgets(buf, 256, file))),
+              "File was closed in parent");
+    sp_destroy(proc2);
+}
+
+Test(proc, inheritFds) {
+    FILE* file = fopen("test/txt.in", "r");
+    cr_assert(not(zero(ptr, file)));
+    proc = sp_open(SP_ARGV("cat"), SP_OPTS(.inheritFds = true));
+    usleep(500);
+    char buf[256];
+    snprintf(buf, 256, "%d", proc->pid);
+    SP_Process* proc2 = sp_run(SP_ARGV("./test/dump-fds.sh", buf),
+                               SP_OPTS(.stdout = SP_REDIR_PIPE()));
+    sp_close(proc);
+    bool found = false;
+    while (fgets(buf, 256, proc2->stdout)) {
+        if (atoi(buf) > STDERR_FILENO) {
+            found = true;
+        }
+    }
+    cr_assert(found, "FD's were not inherited");
+    cr_assert(not(zero(ptr, fgets(buf, 256, file))),
+              "File was closed in parent");
+    sp_destroy(proc2);
 }
