@@ -29,8 +29,12 @@ typedef struct sp_process {
 } SP_Process;
 
 typedef struct sp_opts {
-    char* cwd;   // current working directory
-    char** env;  // environment passed to execve
+    char* cwd;    // current working directory
+    char** env;   // environment passed to execve
+    bool detach;  // detach process from parent
+    // Don't attempt to close other open file descriptors.
+    bool inheritFds;
+
     SP_RedirOpt stdin;
     SP_RedirOpt stdout;
     SP_RedirOpt stderr;
@@ -39,7 +43,7 @@ typedef struct sp_opts {
     // If given you must fully specify the unqiue order.
     // e.g. .redirOrder = {2, 1, 0}
     SP_RedirTarget redirOrder[3];
-    // Make pipes non-blocking. Defaults to false.
+    // Make pipes non-blocking.
     bool nonBlockingPipes;
 } SP_Opts;
 

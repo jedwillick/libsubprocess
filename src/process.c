@@ -10,7 +10,6 @@
 #include <unistd.h>
 
 #include "subprocess/pipe.h"
-#include "subprocess/redirect.h"
 
 // Dupe a NULL terminated array
 static char** dupe_array(char** arr) {
@@ -71,15 +70,57 @@ static int sp_redirect_all(SP_Opts* opts) {
     return 0;
 }
 
-// Child exec handler
-static int sp_child_exec(char** argv, SP_Opts* opts) {
-    if (opts && sp_redirect_all(opts) < 0) {
+static int sp_handle_child_opts(SP_Opts* opts) {
+    if (!opts) {
+        return 0;
+    }
+    if (opts->cwd && chdir(opts->cwd) < 0) {
+        SP_ERROR_MSG("cwd: chdir: %s", opts->cwd);
+        return -1;
+    }
+    if (opts->detach && setsid() < 0) {
+        SP_ERROR_MSG("detach: setsid");
+        return -1;
+    }
+    if (sp_redirect_all(opts) < 0) {
         // Error output is done in redirect.c since it has access to
         // specific details.
-        return SP_EXIT_NOT_EXECUTE;
+        return -1;
     }
-    if (opts && opts->cwd && chdir(opts->cwd) < 0) {
-        SP_ERROR_MSG("chdir: %s", opts->cwd);
+    if (!opts->inheritFds) {
+        int fdLimit = sysconf(_SC_OPEN_MAX);
+        if (fdLimit < 0) {
+            SP_ERROR_MSG(
+                "inheritFds: sysconf: unable to determine max number of open "
+                "file descriptors");
+            return -1;
+        }
+        for (int i = STDERR_FILENO + 1; i < fdLimit; i++) {
+            close(i);
+        }
+
+        // // Possibly a better way that only calls close() on file descriptors that are actually open
+        // DIR* dir = opendir("/proc/self/fd");
+        // if (!dir) {
+        //     SP_ERROR_MSG("inheritFds: opendir: /proc/%d/fd", getpid());
+        //     return -1;
+        // }
+        // int dirFd = dirfd(dir);
+        // struct dirent* entry;
+        // while ((entry = readdir(dir))) {
+        //     int fdNum = atoi(entry->d_name);
+        //     if (fdNum != dirFd && fdNum > STDERR_FILENO) {
+        //         close(fdNum);
+        //     }
+        // }
+        // closedir(dir);
+    }
+    return 0;
+}
+
+// Child exec handler
+static int sp_child_exec(char** argv, SP_Opts* opts) {
+    if (sp_handle_child_opts(opts) < 0) {
         return SP_EXIT_NOT_EXECUTE;
     }
     if (opts && opts->env) {
