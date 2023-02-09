@@ -82,7 +82,7 @@ typedef struct sp_opts {
  * If successful, memory is allocated for the sp_process and must be freed with sp_destroy()
  *
  * @param[in] argv array of arguments to pass to execve. The last element must be NULL.
- * @param options[in,out] options used when spawning the process. See sp_opts
+ * @param[in,out] options options used when spawning the process. See sp_opts
  * @return a pointer to a new sp_process or NULL on error and errno is set accordingly.
  */
 SP_Process* sp_run(char** argv, SP_Opts* options);
