@@ -40,7 +40,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Run clang-format
-        run: pipx run clang-format==15.0.7 --verbose -i $(git ls-files | grep -E ".+\.(c|h)")
+        run: pipx run clang-format==15.0.7 --verbose -i $(git ls-files | grep -E ".+\.(c|h)$")
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4.16.0
         with:
