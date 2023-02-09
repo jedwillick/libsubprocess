@@ -1,9 +1,14 @@
 # libsubprocess
 
-[![CI](https://github.com/jedwillick/subprocess/actions/workflows/ci.yml/badge.svg)](https://github.com/jedwillick/subprocess/actions/workflows/ci.yml)
+<!-- badges: start -->
+
+[![CI](https://github.com/jedwillick/libsubprocess/actions/workflows/ci.yml/badge.svg)](https://github.com/jedwillick/libsubprocess/actions/workflows/ci.yml)
+[![Docs](https://github.com/jedwillick/libsubprocess/actions/workflows/docs.yml/badge.svg)](https://github.com/jedwillick/libsubprocess/actions/workflows/docs.yml)
+
+<!-- badges: end -->
 
 A subprocess library for C that provides a higher level abstraction of fork,
-exec, pipe and dup making it easy to run processes.
+exec, pipe and dup2 making it easy to run processes.
 
 ## Requirements
 
@@ -41,7 +46,8 @@ Then when compiling you must include `-D_GNU_SOURCE`
 
 To use the library you can `#include "subprocess/process.h"` which gives you
 access to the public API.
-Pleae refer to the documentation for detailed information regarding the API.
+Please refer to the [documentation][docs] for detailed information regarding
+the API.
 
 ## Examples
 
@@ -97,7 +103,7 @@ sp_destroy(proc);
 sp_destroy(proc2);
 ```
 
-For more options refer to the documentation.
+For more options refer to the [documentation][docs].
 
 ## Uninstalling
 
@@ -110,3 +116,5 @@ sudo make uninstall
 # Or if you installed to a different location
 INSTALL_PREFIX=~/.local/ make uninstall
 ```
+
+[docs]: https://jedwillick.github.io/libsubprocess/files
