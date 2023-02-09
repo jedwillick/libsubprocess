@@ -29,7 +29,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install Valgrind
-        run: sudo apt install valgrind
+        run: sudo apt install -y valgrind
       - name: Valgrind Memcheck
         run: make memcheck
 
