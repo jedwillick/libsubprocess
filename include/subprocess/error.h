@@ -1,6 +1,7 @@
 #ifndef SP_ERROR_H
 #define SP_ERROR_H
 
+#include <errno.h>
 #include <string.h>
 
 #define SP_EXIT_NOT_EXECUTE 126
