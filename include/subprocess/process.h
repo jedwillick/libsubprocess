@@ -5,6 +5,7 @@
 #include <unistd.h>
 
 #include "subprocess/error.h"
+#include "subprocess/pipe.h"
 #include "subprocess/redirect.h"
 
 #define SP_SIGNAL_OFFSET 128

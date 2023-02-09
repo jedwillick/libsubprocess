@@ -9,8 +9,6 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#include "subprocess/pipe.h"
-
 // Dupe a NULL terminated array
 static char** dupe_array(char** arr) {
     char** dupeArr = malloc(sizeof(char*));
