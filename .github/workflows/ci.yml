@@ -33,8 +33,7 @@ jobs:
       - name: Valgrind Memcheck
         run: make memcheck
 
-  lint:
-    needs: [test, memcheck]
+  format:
     permissions:
       contents: write
     runs-on: ubuntu-latest
