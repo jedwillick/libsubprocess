@@ -101,8 +101,9 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <div class="title">libsubprocess </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="md__home_runner_work_libsubprocess_libsubprocess_README"></a> <a href="https://github.com/jedwillick/subprocess/actions/workflows/ci.yml"><img src="https://github.com/jedwillick/subprocess/actions/workflows/ci.yml/badge.svg" alt="CI" style="pointer-events: none;" class="inline"/></a></p>
-<p>A subprocess library for C that provides a higher level abstraction of fork, exec, pipe and dup making it easy to run processes.</p>
+<div class="textblock"><p><a class="anchor" id="md__home_runner_work_libsubprocess_libsubprocess_README"></a></p>
+<p><a href="https://github.com/jedwillick/libsubprocess/actions/workflows/ci.yml"><img src="https://github.com/jedwillick/libsubprocess/actions/workflows/ci.yml/badge.svg" alt="CI" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/jedwillick/libsubprocess/actions/workflows/docs.yml"><img src="https://github.com/jedwillick/libsubprocess/actions/workflows/docs.yml/badge.svg" alt="Docs" style="pointer-events: none;" class="inline"/></a></p>
+<p>A subprocess library for C that provides a higher level abstraction of fork, exec, pipe and dup2 making it easy to run processes.</p>
 <h1><a class="anchor" id="autotoc_md1"></a>
 Requirements</h1>
 <ul>
@@ -126,7 +127,7 @@ Installation</h1>
 <p>Alternatively you can statically link the library by copying all C files to your src tree and having <code>include/subprocess</code> on your include path. Then when compiling you must include <code>-D_GNU_SOURCE</code></p>
 <h1><a class="anchor" id="autotoc_md3"></a>
 Usage</h1>
-<p>To use the library you can <code>#include "subprocess/process.h"</code> which gives you access to the public API. Pleae refer to the documentation for detailed information regarding the API.</p>
+<p>To use the library you can <code>#include "subprocess/process.h"</code> which gives you access to the public API. Please refer to the <a href="https://jedwillick.github.io/libsubprocess/files">documentation</a> for detailed information regarding the API.</p>
 <h1><a class="anchor" id="autotoc_md4"></a>
 Examples</h1>
 <p>A simple example that runs <code>echo Hello world!</code> with default options</p>
@@ -172,7 +173,7 @@ Examples</h1>
 <div class="ttc" id="aredirect_8h_html_a35041b58db791ff8af8461d3968a5e74a65e0c9b4bf61818464b4d736cfc5bf9c"><div class="ttname"><a href="redirect_8h.html#a35041b58db791ff8af8461d3968a5e74a65e0c9b4bf61818464b4d736cfc5bf9c">SP_REDIR_PATH</a></div><div class="ttdeci">@ SP_REDIR_PATH</div><div class="ttdoc">Redirect to to the file named filename.</div><div class="ttdef"><b>Definition:</b> <a href="redirect_8h_source.html#l00034">redirect.h:34</a></div></div>
 <div class="ttc" id="astructsp__opts_html"><div class="ttname"><a href="structsp__opts.html">sp_opts</a></div><div class="ttdoc">A struct containing options when spawning a process.</div><div class="ttdef"><b>Definition:</b> <a href="process_8h_source.html#l00054">process.h:54</a></div></div>
 <div class="ttc" id="astructsp__opts_html_ae04a917ab8c378b84a6ae6c6ca1b84c2"><div class="ttname"><a href="structsp__opts.html#ae04a917ab8c378b84a6ae6c6ca1b84c2">sp_opts::stdin</a></div><div class="ttdeci">SP_RedirOpt stdin</div><div class="ttdoc">options for stdin</div><div class="ttdef"><b>Definition:</b> <a href="process_8h_source.html#l00060">process.h:60</a></div></div>
-</div><!-- fragment --><p>For more options refer to the documentation.</p>
+</div><!-- fragment --><p>For more options refer to the <a href="https://jedwillick.github.io/libsubprocess/files">documentation</a>.</p>
 <h1><a class="anchor" id="autotoc_md5"></a>
 Uninstalling</h1>
 <p>You can uninstall the shared library by running one command</p>
