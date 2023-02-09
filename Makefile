@@ -87,7 +87,8 @@ coverage-html: coverage
 
 .PHONY: clean
 clean:
-	rm -f build/* $(TARGETS)
+	rm -f $(TARGETS)
+	rm -rf build/
 
 .PHONY: clean-coverage
 clean-coverage:
@@ -112,5 +113,11 @@ uninstall:
 .PHONY: bear
 bear: clean
 	bear -- $(MAKE) all
+
+
+.PHONY: doc
+doc:
+	@mkdir -p build/
+	cd doc && doxygen
 
 subprocess: subprocess.c $(SRCS)
