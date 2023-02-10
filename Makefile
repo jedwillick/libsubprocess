@@ -120,4 +120,8 @@ doc:
 	@mkdir -p build/
 	cd doc && doxygen
 
+.PHONY: doc-local
+doc-local: doc
+	python3 -m http.server --bind localhost --directory build/doc/html/
+
 subprocess: subprocess.c $(SRCS)
