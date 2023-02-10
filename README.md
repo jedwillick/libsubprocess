@@ -26,21 +26,26 @@ git clone git@github.com:jedwillick/libsubprocess.git
 cd libsubprocess
 ```
 
-Then you can build and install it as a shared library that will be dynamically linked
+Then you can build and install it as a shared library that can be dynamically linked
 
 ```bash
 # By default installs to /usr/local so sudo is needed.
 sudo make install
+sudo ldconfig
 
 # You can also specify the install location:
-INSTALL_PREFIX=~/.local/ make install
+INSTALL_PREFIX=~/.local make install
 ```
 
 Then use the `-lsubprocess` flag when linking.
 
-Alternatively you can statically link the library by copying all
-C files to your src tree and having `include/subprocess` on your include path.
-Then when compiling you must include `-D_GNU_SOURCE`
+Alternatively you can compile the library with your source files by copying everything
+from `src/` and `include/` to your local source tree.
+
+```bash
+curl -Lo- https://github.com/jedwillick/libsubprocess/archive/main.tar.gz \
+  | tar -xzv --strip-components=1 libsubprocess-main/src libsubprocess-main/include
+```
 
 ## Usage
 
@@ -101,6 +106,37 @@ SP_Opts opts = { // For style reasons I decided to not use the inline SP_OPTS ma
 SP_Process* proc2 = sp_run(SP_ARGV("tr", "[a-z]", "[A-Z]"), &opts);
 sp_destroy(proc);
 sp_destroy(proc2);
+```
+
+Finally we can bring it all together as a complete program `example.c`
+
+```c
+#include <subprocess/process.h>
+
+int main(void) {
+    SP_Process *proc = sp_run(SP_ARGV("echo", "Hello world!"),
+                              SP_OPTS(.stdout = SP_REDIR_PIPE()));
+    if (!proc) {
+        return 1;
+    }
+
+    SP_Opts opts = {
+        // For style reasons I decided to not use the inline SP_OPTS macro.
+        .stdin = SP_REDIR_FILE(proc->stdout),
+        .stdout = SP_REDIR_PATH("sp-hello-world.txt"),
+    };
+    SP_Process *proc2 = sp_run(SP_ARGV("tr", "[a-z]", "[A-Z]"), &opts);
+    sp_destroy(proc);
+    sp_destroy(proc2);
+}
+```
+
+Then we can compile and dynamically link the library:
+
+```bash
+gcc example.c -lsubprocess
+./a.out
+cat sp-hello-world.txt
 ```
 
 For more options refer to the [documentation][docs].
