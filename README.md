@@ -44,7 +44,7 @@ from `src/` and `include/` to your local source tree.
 
 ```bash
 curl -Lo- https://github.com/jedwillick/libsubprocess/archive/main.tar.gz \
-  | tar -xzv --strip-components=1 libsubprocess-main/src libsubprocess-main/include
+  | tar -xzvk --strip-components=1 libsubprocess-main/src libsubprocess-main/include
 ```
 
 ## Usage
