@@ -50,7 +50,7 @@ Test(pipe, create_non_blocking) {
     char out;
     cr_assert(eq(int, read(opt.value.pipeFd[0], &out, 1), -1));
     cr_assert(any(eq(int, errno, EAGAIN), eq(int, errno, EWOULDBLOCK)),
-              "read: %s: %s", strerrorname_np(errno), strerror(errno));
+              "read: %s", strerror(errno));
     char in = 'x';
     cr_assert(eq(int, write(opt.value.pipeFd[1], &in, 1), 1));
     cr_assert(eq(int, read(opt.value.pipeFd[0], &out, 1), 1));

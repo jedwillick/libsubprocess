@@ -1,3 +1,5 @@
+#define _GNU_SOURCE  // for pipe2()
+
 #include "subprocess/pipe.h"
 
 #include <errno.h>

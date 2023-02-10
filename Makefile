@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS := -std=gnu99 -MMD -Wall -pedantic -D_GNU_SOURCE -Iinclude/
+CFLAGS := -std=gnu99 -MMD -Wall -pedantic -Iinclude/
 DEBUG_CFLAGS = -g -Og -DDEBUG
 
 TARGET = libsubprocess.so
