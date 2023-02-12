@@ -63,17 +63,53 @@ typedef struct sp_opts {
     /**
     * Specifies the order to attempt redirection.
     * Default order is {0, 1, 2}. stdin then stdout then stderr.
-    * If given you must fully specify the unqiue order.
+    * If given you must fully specify the unique order.
     * e.g. .redirOrder = {2, 1, 0}
     */
     SP_RedirTarget redirOrder[3];
 } SP_Opts;
 
+/**
+ * A convenience macro for creating a NULL terminated array of char*'s.
+ * Useful for creating the argv argument to sp_run() and sp_open().
+ * <br>
+ * Example:
+ * \code{.c}
+ * sp_run(SP_ARGV("ls", "-al"), 0);
+ * \endcode
+ * expands to:
+ * \code{.c}
+ * sp_run((char*[]){"ls", "-al", NULL}, 0);
+ * \endcode
+ *
+ * @param[in] ... char*'s
+ */
 #define SP_ARGV(...) \
     (char*[]) { __VA_ARGS__, NULL }
 
+/**
+ * A convenience macro for creating SP_Opts for sp_run() and sp_open()
+ * <br>
+ * Example:
+ * \code{.c}
+ * sp_run(SP_ARGV("ls"), SP_OPTS(.cwd="/etc", .detach=true));
+ * \endcode
+ * expands to:
+ * \code{.c}
+ * sp_run((char*[]){"ls", NULL}, &((SP_Opts){.cwd="/etc", .detach=true}));
+ * \endcode
+ *
+ * @param[in] ... sp_opts fields
+ * @see sp_opts
+ * @see SP_ARGV()
+ */
 #define SP_OPTS(...) &((SP_Opts){__VA_ARGS__})
 
+/**
+ * Macro for getting the size of a fixed array.
+ *
+ * @param[in] fixedArray
+ */
 #define SP_SIZE_FIXED_ARR(fixedArray) \
     (sizeof(fixedArray) / sizeof(fixedArray[0]))
 
@@ -146,7 +182,7 @@ int sp_wait(SP_Process* process);
  * Check if a process has terminated without blocking and set process->exitCode if it has.
  *
  * @param[in,out] process
- * @return the exit code of the process, or -1 if the process is still running or an error occured.
+ * @return the exit code of the process, or -1 if the process is still running or an error occurred.
  */
 int sp_poll(SP_Process* process);
 
