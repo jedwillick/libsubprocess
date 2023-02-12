@@ -41,6 +41,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">libsubprocess
    </div>
+   <div id="projectbrief">A subprocess library for C</div>
   </td>
  </tr>
  </tbody>
@@ -125,20 +126,21 @@ Installation</h1>
 </div><!-- fragment --><p>Then use the <code>-lsubprocess</code> flag when linking.</p>
 <p>Alternatively you can compile the library with your source files by copying everything from <code>src/</code> and <code>include/</code> to your local source tree.</p>
 <div class="fragment"><div class="line">curl -Lo- https://github.com/jedwillick/libsubprocess/archive/main.tar.gz \</div>
-<div class="line">  | tar -xzv --strip-components=1 libsubprocess-main/src libsubprocess-main/include</div>
+<div class="line">  | tar -xzvk --strip-components=1 libsubprocess-main/src libsubprocess-main/include</div>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md3"></a>
 Usage</h1>
 <p>To use the library you can <code>#include "subprocess/process.h"</code> which gives you access to the public API. Please refer to the <a href="https://jedwillick.github.io/libsubprocess/files">documentation</a> for detailed information regarding the API.</p>
 <h1><a class="anchor" id="autotoc_md4"></a>
 Examples</h1>
 <p>A simple example that runs <code>echo Hello world!</code> with default options</p>
-<div class="fragment"><div class="line"><a class="code" href="structsp__process.html">SP_Process</a>* proc = <a class="code" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969">sp_run</a>(SP_ARGV(<span class="stringliteral">&quot;echo&quot;</span>, <span class="stringliteral">&quot;Hello world!&quot;</span>), 0);</div>
+<div class="fragment"><div class="line"><a class="code" href="structsp__process.html">SP_Process</a>* proc = <a class="code" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969">sp_run</a>(<a class="code" href="process_8h.html#ad998ef6e00530713af8d1d5f240add92">SP_ARGV</a>(<span class="stringliteral">&quot;echo&quot;</span>, <span class="stringliteral">&quot;Hello world!&quot;</span>), 0);</div>
 <div class="line"><a class="code" href="process_8h.html#a09b4af7642006c7e8eaa03a05e9dbf82">sp_destroy</a>(proc);</div>
 <div class="ttc" id="aprocess_8h_html_a09b4af7642006c7e8eaa03a05e9dbf82"><div class="ttname"><a href="process_8h.html#a09b4af7642006c7e8eaa03a05e9dbf82">sp_destroy</a></div><div class="ttdeci">void sp_destroy(SP_Process *process)</div><div class="ttdoc">Free all memory allocated to an sp_process.</div></div>
 <div class="ttc" id="aprocess_8h_html_a1937a5defc5a604e0c4e4dff0e0f9969"><div class="ttname"><a href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969">sp_run</a></div><div class="ttdeci">SP_Process * sp_run(char **argv, SP_Opts *options)</div><div class="ttdoc">Run a process with the given options and wait for it to finish.</div></div>
+<div class="ttc" id="aprocess_8h_html_ad998ef6e00530713af8d1d5f240add92"><div class="ttname"><a href="process_8h.html#ad998ef6e00530713af8d1d5f240add92">SP_ARGV</a></div><div class="ttdeci">#define SP_ARGV(...)</div><div class="ttdoc">A convenience macro for creating a NULL terminated array of char*'s.</div><div class="ttdef"><b>Definition:</b> <a href="process_8h_source.html#l00087">process.h:87</a></div></div>
 <div class="ttc" id="astructsp__process_html"><div class="ttname"><a href="structsp__process.html">sp_process</a></div><div class="ttdoc">A struct containing data pertintent to a process.</div><div class="ttdef"><b>Definition:</b> <a href="process_8h_source.html#l00038">process.h:38</a></div></div>
 </div><!-- fragment --><p>We can also capture that output by redirecting stdout to a pipe.</p>
-<div class="fragment"><div class="line"><a class="code" href="structsp__process.html">SP_Process</a>* proc = <a class="code" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969">sp_run</a>(SP_ARGV(<span class="stringliteral">&quot;echo&quot;</span>, <span class="stringliteral">&quot;Hello world!&quot;</span>), SP_OPTS(.stdout = <a class="code" href="redirect_8h.html#a35041b58db791ff8af8461d3968a5e74a9d85f156ccc37d2c698f31ef9385b614">SP_REDIR_PIPE</a>()));</div>
+<div class="fragment"><div class="line"><a class="code" href="structsp__process.html">SP_Process</a>* proc = <a class="code" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969">sp_run</a>(<a class="code" href="process_8h.html#ad998ef6e00530713af8d1d5f240add92">SP_ARGV</a>(<span class="stringliteral">&quot;echo&quot;</span>, <span class="stringliteral">&quot;Hello world!&quot;</span>), <a class="code" href="process_8h.html#ab69431fc6b0d054abd4dfc2f7ce5f3ae">SP_OPTS</a>(.stdout = <a class="code" href="redirect_8h.html#a35041b58db791ff8af8461d3968a5e74a9d85f156ccc37d2c698f31ef9385b614">SP_REDIR_PIPE</a>()));</div>
 <div class="line"><span class="keywordflow">if</span> (!proc) {</div>
 <div class="line">    <span class="keywordflow">return</span> 1;</div>
 <div class="line">}</div>
@@ -147,19 +149,20 @@ Examples</h1>
 <div class="line">    printf(<span class="stringliteral">&quot;%s&quot;</span>, buf);</div>
 <div class="line">}</div>
 <div class="line"><a class="code" href="process_8h.html#a09b4af7642006c7e8eaa03a05e9dbf82">sp_destroy</a>(proc);</div>
+<div class="ttc" id="aprocess_8h_html_ab69431fc6b0d054abd4dfc2f7ce5f3ae"><div class="ttname"><a href="process_8h.html#ab69431fc6b0d054abd4dfc2f7ce5f3ae">SP_OPTS</a></div><div class="ttdeci">#define SP_OPTS(...)</div><div class="ttdoc">A convenience macro for creating SP_Opts for sp_run() and sp_open()   Example:</div><div class="ttdef"><b>Definition:</b> <a href="process_8h_source.html#l00106">process.h:106</a></div></div>
 <div class="ttc" id="aredirect_8h_html_a35041b58db791ff8af8461d3968a5e74a9d85f156ccc37d2c698f31ef9385b614"><div class="ttname"><a href="redirect_8h.html#a35041b58db791ff8af8461d3968a5e74a9d85f156ccc37d2c698f31ef9385b614">SP_REDIR_PIPE</a></div><div class="ttdeci">@ SP_REDIR_PIPE</div><div class="ttdoc">Redirect to a pipe connected to parent that will be opened as a FILE*.</div><div class="ttdef"><b>Definition:</b> <a href="redirect_8h_source.html#l00037">redirect.h:37</a></div></div>
 <div class="ttc" id="astructsp__process_html_a36cba2ef4dc780c4ae9fe5471a74f1bf"><div class="ttname"><a href="structsp__process.html#a36cba2ef4dc780c4ae9fe5471a74f1bf">sp_process::stdout</a></div><div class="ttdeci">FILE * stdout</div><div class="ttdoc">stdout of process</div><div class="ttdef"><b>Definition:</b> <a href="process_8h_source.html#l00044">process.h:44</a></div></div>
 </div><!-- fragment --><p>Instead of printing the output we can pass it along to another process just like doing <code>echo "Hello world!" | tr [a-z] [A-Z]</code></p>
-<div class="fragment"><div class="line"><a class="code" href="structsp__process.html">SP_Process</a>* proc = <a class="code" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969">sp_run</a>(SP_ARGV(<span class="stringliteral">&quot;echo&quot;</span>, <span class="stringliteral">&quot;Hello world!&quot;</span>), SP_OPTS(.stdout = <a class="code" href="redirect_8h.html#a35041b58db791ff8af8461d3968a5e74a9d85f156ccc37d2c698f31ef9385b614">SP_REDIR_PIPE</a>()));</div>
+<div class="fragment"><div class="line"><a class="code" href="structsp__process.html">SP_Process</a>* proc = <a class="code" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969">sp_run</a>(<a class="code" href="process_8h.html#ad998ef6e00530713af8d1d5f240add92">SP_ARGV</a>(<span class="stringliteral">&quot;echo&quot;</span>, <span class="stringliteral">&quot;Hello world!&quot;</span>), <a class="code" href="process_8h.html#ab69431fc6b0d054abd4dfc2f7ce5f3ae">SP_OPTS</a>(.stdout = <a class="code" href="redirect_8h.html#a35041b58db791ff8af8461d3968a5e74a9d85f156ccc37d2c698f31ef9385b614">SP_REDIR_PIPE</a>()));</div>
 <div class="line"><span class="keywordflow">if</span> (!proc) {</div>
 <div class="line">    <span class="keywordflow">return</span> 1;</div>
 <div class="line">}</div>
-<div class="line"><a class="code" href="structsp__process.html">SP_Process</a>* proc2 = <a class="code" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969">sp_run</a>(SP_ARGV(<span class="stringliteral">&quot;tr&quot;</span>, <span class="stringliteral">&quot;[a-z]&quot;</span>, <span class="stringliteral">&quot;[A-Z]&quot;</span>), SP_OPTS(.stdin = <a class="code" href="redirect_8h.html#aa06f31c56b7c06c2c3a457ab110b02cf">SP_REDIR_FILE</a>(proc-&gt;<a class="code" href="structsp__process.html#a36cba2ef4dc780c4ae9fe5471a74f1bf">stdout</a>)));</div>
+<div class="line"><a class="code" href="structsp__process.html">SP_Process</a>* proc2 = <a class="code" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969">sp_run</a>(<a class="code" href="process_8h.html#ad998ef6e00530713af8d1d5f240add92">SP_ARGV</a>(<span class="stringliteral">&quot;tr&quot;</span>, <span class="stringliteral">&quot;[a-z]&quot;</span>, <span class="stringliteral">&quot;[A-Z]&quot;</span>), <a class="code" href="process_8h.html#ab69431fc6b0d054abd4dfc2f7ce5f3ae">SP_OPTS</a>(.stdin = <a class="code" href="redirect_8h.html#aa06f31c56b7c06c2c3a457ab110b02cf">SP_REDIR_FILE</a>(proc-&gt;<a class="code" href="structsp__process.html#a36cba2ef4dc780c4ae9fe5471a74f1bf">stdout</a>)));</div>
 <div class="line"><a class="code" href="process_8h.html#a09b4af7642006c7e8eaa03a05e9dbf82">sp_destroy</a>(proc);</div>
 <div class="line"><a class="code" href="process_8h.html#a09b4af7642006c7e8eaa03a05e9dbf82">sp_destroy</a>(proc2);</div>
 <div class="ttc" id="aredirect_8h_html_aa06f31c56b7c06c2c3a457ab110b02cf"><div class="ttname"><a href="redirect_8h.html#aa06f31c56b7c06c2c3a457ab110b02cf">SP_REDIR_FILE</a></div><div class="ttdeci">#define SP_REDIR_FILE(_file)</div><div class="ttdoc">Setup sp_redir_opt to redirect to a FILE*.</div><div class="ttdef"><b>Definition:</b> <a href="redirect_8h_source.html#l00094">redirect.h:94</a></div></div>
 </div><!-- fragment --><p>We could than redirect that output to a file mimicking <code>echo "Hello world!" | tr [a-z] [A-Z] &gt; sp-hello-world.txt</code></p>
-<div class="fragment"><div class="line"><a class="code" href="structsp__process.html">SP_Process</a>* proc = <a class="code" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969">sp_run</a>(SP_ARGV(<span class="stringliteral">&quot;echo&quot;</span>, <span class="stringliteral">&quot;Hello world!&quot;</span>), SP_OPTS(.stdout = <a class="code" href="redirect_8h.html#a35041b58db791ff8af8461d3968a5e74a9d85f156ccc37d2c698f31ef9385b614">SP_REDIR_PIPE</a>()));</div>
+<div class="fragment"><div class="line"><a class="code" href="structsp__process.html">SP_Process</a>* proc = <a class="code" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969">sp_run</a>(<a class="code" href="process_8h.html#ad998ef6e00530713af8d1d5f240add92">SP_ARGV</a>(<span class="stringliteral">&quot;echo&quot;</span>, <span class="stringliteral">&quot;Hello world!&quot;</span>), <a class="code" href="process_8h.html#ab69431fc6b0d054abd4dfc2f7ce5f3ae">SP_OPTS</a>(.stdout = <a class="code" href="redirect_8h.html#a35041b58db791ff8af8461d3968a5e74a9d85f156ccc37d2c698f31ef9385b614">SP_REDIR_PIPE</a>()));</div>
 <div class="line"><span class="keywordflow">if</span> (!proc) {</div>
 <div class="line">    <span class="keywordflow">return</span> 1;</div>
 <div class="line">}</div>
@@ -168,7 +171,7 @@ Examples</h1>
 <div class="line">    .<a class="code" href="structsp__opts.html#ae04a917ab8c378b84a6ae6c6ca1b84c2">stdin</a> = <a class="code" href="redirect_8h.html#aa06f31c56b7c06c2c3a457ab110b02cf">SP_REDIR_FILE</a>(proc-&gt;<a class="code" href="structsp__process.html#a36cba2ef4dc780c4ae9fe5471a74f1bf">stdout</a>),</div>
 <div class="line">    .stdout = <a class="code" href="redirect_8h.html#a35041b58db791ff8af8461d3968a5e74a65e0c9b4bf61818464b4d736cfc5bf9c">SP_REDIR_PATH</a>(<span class="stringliteral">&quot;sp-hello-world.txt&quot;</span>),</div>
 <div class="line">};</div>
-<div class="line"><a class="code" href="structsp__process.html">SP_Process</a>* proc2 = <a class="code" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969">sp_run</a>(SP_ARGV(<span class="stringliteral">&quot;tr&quot;</span>, <span class="stringliteral">&quot;[a-z]&quot;</span>, <span class="stringliteral">&quot;[A-Z]&quot;</span>), &amp;opts);</div>
+<div class="line"><a class="code" href="structsp__process.html">SP_Process</a>* proc2 = <a class="code" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969">sp_run</a>(<a class="code" href="process_8h.html#ad998ef6e00530713af8d1d5f240add92">SP_ARGV</a>(<span class="stringliteral">&quot;tr&quot;</span>, <span class="stringliteral">&quot;[a-z]&quot;</span>, <span class="stringliteral">&quot;[A-Z]&quot;</span>), &amp;opts);</div>
 <div class="line"><a class="code" href="process_8h.html#a09b4af7642006c7e8eaa03a05e9dbf82">sp_destroy</a>(proc);</div>
 <div class="line"><a class="code" href="process_8h.html#a09b4af7642006c7e8eaa03a05e9dbf82">sp_destroy</a>(proc2);</div>
 <div class="ttc" id="aredirect_8h_html_a35041b58db791ff8af8461d3968a5e74a65e0c9b4bf61818464b4d736cfc5bf9c"><div class="ttname"><a href="redirect_8h.html#a35041b58db791ff8af8461d3968a5e74a65e0c9b4bf61818464b4d736cfc5bf9c">SP_REDIR_PATH</a></div><div class="ttdeci">@ SP_REDIR_PATH</div><div class="ttdoc">Redirect to to the file named filename.</div><div class="ttdef"><b>Definition:</b> <a href="redirect_8h_source.html#l00034">redirect.h:34</a></div></div>
@@ -178,8 +181,8 @@ Examples</h1>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &lt;<a class="code" href="process_8h.html">subprocess/process.h</a>&gt;</span></div>
 <div class="line"> </div>
 <div class="line"><span class="keywordtype">int</span> main(<span class="keywordtype">void</span>) {</div>
-<div class="line">    <a class="code" href="structsp__process.html">SP_Process</a> *proc = <a class="code" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969">sp_run</a>(SP_ARGV(<span class="stringliteral">&quot;echo&quot;</span>, <span class="stringliteral">&quot;Hello world!&quot;</span>),</div>
-<div class="line">                              SP_OPTS(.stdout = <a class="code" href="redirect_8h.html#a35041b58db791ff8af8461d3968a5e74a9d85f156ccc37d2c698f31ef9385b614">SP_REDIR_PIPE</a>()));</div>
+<div class="line">    <a class="code" href="structsp__process.html">SP_Process</a> *proc = <a class="code" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969">sp_run</a>(<a class="code" href="process_8h.html#ad998ef6e00530713af8d1d5f240add92">SP_ARGV</a>(<span class="stringliteral">&quot;echo&quot;</span>, <span class="stringliteral">&quot;Hello world!&quot;</span>),</div>
+<div class="line">                              <a class="code" href="process_8h.html#ab69431fc6b0d054abd4dfc2f7ce5f3ae">SP_OPTS</a>(.stdout = <a class="code" href="redirect_8h.html#a35041b58db791ff8af8461d3968a5e74a9d85f156ccc37d2c698f31ef9385b614">SP_REDIR_PIPE</a>()));</div>
 <div class="line">    <span class="keywordflow">if</span> (!proc) {</div>
 <div class="line">        <span class="keywordflow">return</span> 1;</div>
 <div class="line">    }</div>
@@ -189,7 +192,7 @@ Examples</h1>
 <div class="line">        .<a class="code" href="structsp__opts.html#ae04a917ab8c378b84a6ae6c6ca1b84c2">stdin</a> = <a class="code" href="redirect_8h.html#aa06f31c56b7c06c2c3a457ab110b02cf">SP_REDIR_FILE</a>(proc-&gt;<a class="code" href="structsp__process.html#a36cba2ef4dc780c4ae9fe5471a74f1bf">stdout</a>),</div>
 <div class="line">        .stdout = <a class="code" href="redirect_8h.html#a35041b58db791ff8af8461d3968a5e74a65e0c9b4bf61818464b4d736cfc5bf9c">SP_REDIR_PATH</a>(<span class="stringliteral">&quot;sp-hello-world.txt&quot;</span>),</div>
 <div class="line">    };</div>
-<div class="line">    <a class="code" href="structsp__process.html">SP_Process</a> *proc2 = <a class="code" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969">sp_run</a>(SP_ARGV(<span class="stringliteral">&quot;tr&quot;</span>, <span class="stringliteral">&quot;[a-z]&quot;</span>, <span class="stringliteral">&quot;[A-Z]&quot;</span>), &amp;opts);</div>
+<div class="line">    <a class="code" href="structsp__process.html">SP_Process</a> *proc2 = <a class="code" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969">sp_run</a>(<a class="code" href="process_8h.html#ad998ef6e00530713af8d1d5f240add92">SP_ARGV</a>(<span class="stringliteral">&quot;tr&quot;</span>, <span class="stringliteral">&quot;[a-z]&quot;</span>, <span class="stringliteral">&quot;[A-Z]&quot;</span>), &amp;opts);</div>
 <div class="line">    <a class="code" href="process_8h.html#a09b4af7642006c7e8eaa03a05e9dbf82">sp_destroy</a>(proc);</div>
 <div class="line">    <a class="code" href="process_8h.html#a09b4af7642006c7e8eaa03a05e9dbf82">sp_destroy</a>(proc2);</div>
 <div class="line">}</div>

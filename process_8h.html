@@ -41,6 +41,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">libsubprocess
    </div>
+   <div id="projectbrief">A subprocess library for C</div>
   </td>
  </tr>
  </tbody>
@@ -137,14 +138,15 @@ Macros</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="process_8h.html#aa2caf31f24b40025bbee85b7fdfde753">SP_SIGNAL_OFFSET</a>&#160;&#160;&#160;128</td></tr>
 <tr class="memdesc:aa2caf31f24b40025bbee85b7fdfde753"><td class="mdescLeft">&#160;</td><td class="mdescRight">Offset added to signal numbers when setting the exit code. <br /></td></tr>
 <tr class="separator:aa2caf31f24b40025bbee85b7fdfde753"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad998ef6e00530713af8d1d5f240add92"><td class="memItemLeft" align="right" valign="top"><a id="ad998ef6e00530713af8d1d5f240add92"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>SP_ARGV</b>(...)&#160;&#160;&#160;    (char*[]) { __VA_ARGS__, NULL }</td></tr>
+<tr class="memitem:ad998ef6e00530713af8d1d5f240add92"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="process_8h.html#ad998ef6e00530713af8d1d5f240add92">SP_ARGV</a>(...)&#160;&#160;&#160;    (char*[]) { __VA_ARGS__, NULL }</td></tr>
+<tr class="memdesc:ad998ef6e00530713af8d1d5f240add92"><td class="mdescLeft">&#160;</td><td class="mdescRight">A convenience macro for creating a NULL terminated array of char*'s.  <a href="process_8h.html#ad998ef6e00530713af8d1d5f240add92">More...</a><br /></td></tr>
 <tr class="separator:ad998ef6e00530713af8d1d5f240add92"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab69431fc6b0d054abd4dfc2f7ce5f3ae"><td class="memItemLeft" align="right" valign="top"><a id="ab69431fc6b0d054abd4dfc2f7ce5f3ae"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>SP_OPTS</b>(...)&#160;&#160;&#160;&amp;((<a class="el" href="process_8h.html#a7b03745c1b71cb42e165c6a66d7fea58">SP_Opts</a>){__VA_ARGS__})</td></tr>
+<tr class="memitem:ab69431fc6b0d054abd4dfc2f7ce5f3ae"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="process_8h.html#ab69431fc6b0d054abd4dfc2f7ce5f3ae">SP_OPTS</a>(...)&#160;&#160;&#160;&amp;((<a class="el" href="process_8h.html#a7b03745c1b71cb42e165c6a66d7fea58">SP_Opts</a>){__VA_ARGS__})</td></tr>
+<tr class="memdesc:ab69431fc6b0d054abd4dfc2f7ce5f3ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">A convenience macro for creating SP_Opts for <a class="el" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969" title="Run a process with the given options and wait for it to finish.">sp_run()</a> and <a class="el" href="process_8h.html#a1867fbb98e4e26dd0069541374033ba1" title="Open a process with the given options and return a pointer to it.">sp_open()</a> <br  />
+ Example:  <a href="process_8h.html#ab69431fc6b0d054abd4dfc2f7ce5f3ae">More...</a><br /></td></tr>
 <tr class="separator:ab69431fc6b0d054abd4dfc2f7ce5f3ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad2cf75305b52523870a3115f62ca203d"><td class="memItemLeft" align="right" valign="top"><a id="ad2cf75305b52523870a3115f62ca203d"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>SP_SIZE_FIXED_ARR</b>(fixedArray)&#160;&#160;&#160;    (sizeof(fixedArray) / sizeof(fixedArray[0]))</td></tr>
+<tr class="memitem:ad2cf75305b52523870a3115f62ca203d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="process_8h.html#ad2cf75305b52523870a3115f62ca203d">SP_SIZE_FIXED_ARR</a>(fixedArray)&#160;&#160;&#160;    (sizeof(fixedArray) / sizeof(fixedArray[0]))</td></tr>
+<tr class="memdesc:ad2cf75305b52523870a3115f62ca203d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Macro for getting the size of a fixed array.  <a href="process_8h.html#ad2cf75305b52523870a3115f62ca203d">More...</a><br /></td></tr>
 <tr class="separator:ad2cf75305b52523870a3115f62ca203d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
@@ -203,7 +205,105 @@ Functions</h2></td></tr>
 <div class="textblock"><p>Process API. </p>
 
 <p class="definition">Definition in file <a class="el" href="process_8h_source.html">process.h</a>.</p>
-</div><h2 class="groupheader">Typedef Documentation</h2>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="ad998ef6e00530713af8d1d5f240add92"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad998ef6e00530713af8d1d5f240add92">&#9670;&nbsp;</a></span>SP_ARGV</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define SP_ARGV</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;    (char*[]) { __VA_ARGS__, NULL }</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>A convenience macro for creating a NULL terminated array of char*'s. </p>
+<p>Useful for creating the argv argument to <a class="el" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969" title="Run a process with the given options and wait for it to finish.">sp_run()</a> and <a class="el" href="process_8h.html#a1867fbb98e4e26dd0069541374033ba1" title="Open a process with the given options and return a pointer to it.">sp_open()</a>. <br  />
+ Example: </p><div class="fragment"><div class="line"><a class="code" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969">sp_run</a>(<a class="code" href="process_8h.html#ad998ef6e00530713af8d1d5f240add92">SP_ARGV</a>(<span class="stringliteral">&quot;ls&quot;</span>, <span class="stringliteral">&quot;-al&quot;</span>), 0);</div>
+<div class="ttc" id="aprocess_8h_html_a1937a5defc5a604e0c4e4dff0e0f9969"><div class="ttname"><a href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969">sp_run</a></div><div class="ttdeci">SP_Process * sp_run(char **argv, SP_Opts *options)</div><div class="ttdoc">Run a process with the given options and wait for it to finish.</div></div>
+<div class="ttc" id="aprocess_8h_html_ad998ef6e00530713af8d1d5f240add92"><div class="ttname"><a href="process_8h.html#ad998ef6e00530713af8d1d5f240add92">SP_ARGV</a></div><div class="ttdeci">#define SP_ARGV(...)</div><div class="ttdoc">A convenience macro for creating a NULL terminated array of char*'s.</div><div class="ttdef"><b>Definition:</b> <a href="process_8h_source.html#l00087">process.h:87</a></div></div>
+</div><!-- fragment --><p> expands to: </p><div class="fragment"><div class="line"><a class="code" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969">sp_run</a>((<span class="keywordtype">char</span>*[]){<span class="stringliteral">&quot;ls&quot;</span>, <span class="stringliteral">&quot;-al&quot;</span>, NULL}, 0);</div>
+</div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">...</td><td>char*'s </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="process_8h_source.html#l00087">87</a> of file <a class="el" href="process_8h_source.html">process.h</a>.</p>
+
+</div>
+</div>
+<a id="ab69431fc6b0d054abd4dfc2f7ce5f3ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab69431fc6b0d054abd4dfc2f7ce5f3ae">&#9670;&nbsp;</a></span>SP_OPTS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define SP_OPTS</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;&amp;((<a class="el" href="process_8h.html#a7b03745c1b71cb42e165c6a66d7fea58">SP_Opts</a>){__VA_ARGS__})</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>A convenience macro for creating SP_Opts for <a class="el" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969" title="Run a process with the given options and wait for it to finish.">sp_run()</a> and <a class="el" href="process_8h.html#a1867fbb98e4e26dd0069541374033ba1" title="Open a process with the given options and return a pointer to it.">sp_open()</a> <br  />
+ Example: </p>
+<div class="fragment"><div class="line"><a class="code" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969">sp_run</a>(<a class="code" href="process_8h.html#ad998ef6e00530713af8d1d5f240add92">SP_ARGV</a>(<span class="stringliteral">&quot;ls&quot;</span>), <a class="code" href="process_8h.html#ab69431fc6b0d054abd4dfc2f7ce5f3ae">SP_OPTS</a>(.cwd=<span class="stringliteral">&quot;/etc&quot;</span>, .detach=<span class="keyword">true</span>));</div>
+<div class="ttc" id="aprocess_8h_html_ab69431fc6b0d054abd4dfc2f7ce5f3ae"><div class="ttname"><a href="process_8h.html#ab69431fc6b0d054abd4dfc2f7ce5f3ae">SP_OPTS</a></div><div class="ttdeci">#define SP_OPTS(...)</div><div class="ttdoc">A convenience macro for creating SP_Opts for sp_run() and sp_open()   Example:</div><div class="ttdef"><b>Definition:</b> <a href="process_8h_source.html#l00106">process.h:106</a></div></div>
+</div><!-- fragment --><p> expands to: </p><div class="fragment"><div class="line"><a class="code" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969">sp_run</a>((<span class="keywordtype">char</span>*[]){<span class="stringliteral">&quot;ls&quot;</span>, NULL}, &amp;((<a class="code" href="process_8h.html#a7b03745c1b71cb42e165c6a66d7fea58">SP_Opts</a>){.cwd=<span class="stringliteral">&quot;/etc&quot;</span>, .detach=<span class="keyword">true</span>}));</div>
+<div class="ttc" id="aprocess_8h_html_a7b03745c1b71cb42e165c6a66d7fea58"><div class="ttname"><a href="process_8h.html#a7b03745c1b71cb42e165c6a66d7fea58">SP_Opts</a></div><div class="ttdeci">struct sp_opts SP_Opts</div><div class="ttdoc">A struct containing options when spawning a process.</div></div>
+</div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">...</td><td><a class="el" href="structsp__opts.html" title="A struct containing options when spawning a process.">sp_opts</a> fields </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="structsp__opts.html" title="A struct containing options when spawning a process.">sp_opts</a> </dd>
+<dd>
+<a class="el" href="process_8h.html#ad998ef6e00530713af8d1d5f240add92" title="A convenience macro for creating a NULL terminated array of char*&#39;s.">SP_ARGV()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="process_8h_source.html#l00106">106</a> of file <a class="el" href="process_8h_source.html">process.h</a>.</p>
+
+</div>
+</div>
+<a id="ad2cf75305b52523870a3115f62ca203d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2cf75305b52523870a3115f62ca203d">&#9670;&nbsp;</a></span>SP_SIZE_FIXED_ARR</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define SP_SIZE_FIXED_ARR</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">fixedArray</td><td>)</td>
+          <td>&#160;&#160;&#160;    (sizeof(fixedArray) / sizeof(fixedArray[0]))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Macro for getting the size of a fixed array. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">fixedArray</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="process_8h_source.html#l00113">113</a> of file <a class="el" href="process_8h_source.html">process.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Typedef Documentation</h2>
 <a id="a7b03745c1b71cb42e165c6a66d7fea58"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7b03745c1b71cb42e165c6a66d7fea58">&#9670;&nbsp;</a></span>SP_Opts</h2>
 
@@ -413,7 +513,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the exit code of the process, or -1 if the process is still running or an error occured. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the exit code of the process, or -1 if the process is still running or an error occurred. </dd></dl>
 
 </div>
 </div>

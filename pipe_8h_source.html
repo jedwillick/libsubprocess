@@ -41,6 +41,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">libsubprocess
    </div>
+   <div id="projectbrief">A subprocess library for C</div>
   </td>
  </tr>
  </tbody>
@@ -108,15 +109,18 @@ $(document).ready(function(){initNavTree('pipe_8h_source.html',''); initResizabl
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="redirect_8h.html">subprocess/redirect.h</a>&quot;</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="pipe_8h.html#a9779f2bcebda9518ce6e347733f28eef">   24</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="pipe_8h.html#a9779f2bcebda9518ce6e347733f28eef">sp_pipe_create</a>(<a class="code" href="structsp__redir__opt.html">SP_RedirOpt</a>* opt, <span class="keywordtype">bool</span> nonBlocking);</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="pipe_8h.html#ad1800adf5d74c45e1f74093cfe92063f">   33</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="pipe_8h.html#ad1800adf5d74c45e1f74093cfe92063f">sp_pipe_close</a>(<span class="keywordtype">int</span> fd[2]);</div>
+<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="pipe_8h.html#aafa26c8e5d12b2b6141dd1b0e87131bc">   21</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="pipe_8h.html#aafa26c8e5d12b2b6141dd1b0e87131bc">sp_fd_close</a>(<span class="keywordtype">int</span>* fd);</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="pipe_8h.html#a9779f2bcebda9518ce6e347733f28eef">   33</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="pipe_8h.html#a9779f2bcebda9518ce6e347733f28eef">sp_pipe_create</a>(<a class="code" href="structsp__redir__opt.html">SP_RedirOpt</a>* opt, <span class="keywordtype">bool</span> nonBlocking);</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="pipe_8h.html#aa647df57cbe2aca5076c11c74eeae7e0">   43</a></span>&#160;FILE* <a class="code" href="pipe_8h.html#aa647df57cbe2aca5076c11c74eeae7e0">sp_pipe_fdopen</a>(<span class="keywordtype">int</span> fd[2], <span class="keywordtype">bool</span> isInput);</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="preprocessor">#endif  </span><span class="comment">// SP_PIPE_H</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="pipe_8h.html#ad1800adf5d74c45e1f74093cfe92063f">   42</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="pipe_8h.html#ad1800adf5d74c45e1f74093cfe92063f">sp_pipe_close</a>(<span class="keywordtype">int</span> fd[2]);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="pipe_8h.html#aa647df57cbe2aca5076c11c74eeae7e0">   52</a></span>&#160;FILE* <a class="code" href="pipe_8h.html#aa647df57cbe2aca5076c11c74eeae7e0">sp_pipe_fdopen</a>(<span class="keywordtype">int</span> fd[2], <span class="keywordtype">bool</span> isInput);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="preprocessor">#endif  </span><span class="comment">// SP_PIPE_H</span></div>
 <div class="ttc" id="apipe_8h_html_a9779f2bcebda9518ce6e347733f28eef"><div class="ttname"><a href="pipe_8h.html#a9779f2bcebda9518ce6e347733f28eef">sp_pipe_create</a></div><div class="ttdeci">int sp_pipe_create(SP_RedirOpt *opt, bool nonBlocking)</div><div class="ttdoc">Create a pipe at opt-&gt;value.pipeFd with the O_CLOEXEC flag.</div></div>
 <div class="ttc" id="apipe_8h_html_aa647df57cbe2aca5076c11c74eeae7e0"><div class="ttname"><a href="pipe_8h.html#aa647df57cbe2aca5076c11c74eeae7e0">sp_pipe_fdopen</a></div><div class="ttdeci">FILE * sp_pipe_fdopen(int fd[2], bool isInput)</div><div class="ttdoc">Opens a FILE* to either the read or write end of the pipe, and closes the other end.</div></div>
+<div class="ttc" id="apipe_8h_html_aafa26c8e5d12b2b6141dd1b0e87131bc"><div class="ttname"><a href="pipe_8h.html#aafa26c8e5d12b2b6141dd1b0e87131bc">sp_fd_close</a></div><div class="ttdeci">int sp_fd_close(int *fd)</div><div class="ttdoc">Close the file descriptor and set it to -1.</div></div>
 <div class="ttc" id="apipe_8h_html_ad1800adf5d74c45e1f74093cfe92063f"><div class="ttname"><a href="pipe_8h.html#ad1800adf5d74c45e1f74093cfe92063f">sp_pipe_close</a></div><div class="ttdeci">int sp_pipe_close(int fd[2])</div><div class="ttdoc">Close both ends of the pipe and sets them to -1.</div></div>
 <div class="ttc" id="aredirect_8h_html"><div class="ttname"><a href="redirect_8h.html">redirect.h</a></div><div class="ttdoc">File Redirection API.</div></div>
 <div class="ttc" id="astructsp__redir__opt_html"><div class="ttname"><a href="structsp__redir__opt.html">sp_redir_opt</a></div><div class="ttdoc">Struct used to configure redirection.</div><div class="ttdef"><b>Definition:</b> <a href="redirect_8h_source.html#l00049">redirect.h:49</a></div></div>

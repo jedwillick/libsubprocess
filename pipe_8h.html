@@ -41,6 +41,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">libsubprocess
    </div>
+   <div id="projectbrief">A subprocess library for C</div>
   </td>
  </tr>
  </tbody>
@@ -124,6 +125,9 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:aafa26c8e5d12b2b6141dd1b0e87131bc"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pipe_8h.html#aafa26c8e5d12b2b6141dd1b0e87131bc">sp_fd_close</a> (int *fd)</td></tr>
+<tr class="memdesc:aafa26c8e5d12b2b6141dd1b0e87131bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Close the file descriptor and set it to -1.  <a href="pipe_8h.html#aafa26c8e5d12b2b6141dd1b0e87131bc">More...</a><br /></td></tr>
+<tr class="separator:aafa26c8e5d12b2b6141dd1b0e87131bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9779f2bcebda9518ce6e347733f28eef"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pipe_8h.html#a9779f2bcebda9518ce6e347733f28eef">sp_pipe_create</a> (<a class="el" href="redirect_8h.html#a0932ebe004db3feed121ee1c133711b2">SP_RedirOpt</a> *opt, bool nonBlocking)</td></tr>
 <tr class="memdesc:a9779f2bcebda9518ce6e347733f28eef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a pipe at opt-&gt;value.pipeFd with the O_CLOEXEC flag.  <a href="pipe_8h.html#a9779f2bcebda9518ce6e347733f28eef">More...</a><br /></td></tr>
 <tr class="separator:a9779f2bcebda9518ce6e347733f28eef"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -139,6 +143,34 @@ Functions</h2></td></tr>
 
 <p class="definition">Definition in file <a class="el" href="pipe_8h_source.html">pipe.h</a>.</p>
 </div><h2 class="groupheader">Function Documentation</h2>
+<a id="aafa26c8e5d12b2b6141dd1b0e87131bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafa26c8e5d12b2b6141dd1b0e87131bc">&#9670;&nbsp;</a></span>sp_fd_close()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int sp_fd_close </td>
+          <td>(</td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>fd</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Close the file descriptor and set it to -1. </p>
+<p>If the fd is already closed (-1) then nothing is done.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">fd</td><td>the file descriptor being closed. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success, -1 on error and errno is set by close(2). </dd></dl>
+
+</div>
+</div>
 <a id="ad1800adf5d74c45e1f74093cfe92063f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad1800adf5d74c45e1f74093cfe92063f">&#9670;&nbsp;</a></span>sp_pipe_close()</h2>
 

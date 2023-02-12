@@ -41,6 +41,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">libsubprocess
    </div>
+   <div id="projectbrief">A subprocess library for C</div>
   </td>
  </tr>
  </tbody>
@@ -134,6 +135,9 @@ Macros</h2></td></tr>
 <tr class="memitem:a87a2c7eb0752860a6da20e46032ba59a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="error_8h.html#a87a2c7eb0752860a6da20e46032ba59a">SP_ERROR_MSG</a>(fmt, ...)&#160;&#160;&#160;    fprintf(stderr, &quot;SP: &quot; fmt &quot;: %s\n&quot;, ##__VA_ARGS__, strerror(errno))</td></tr>
 <tr class="memdesc:a87a2c7eb0752860a6da20e46032ba59a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print an error message to stderr, similar to perror(3).  <a href="error_8h.html#a87a2c7eb0752860a6da20e46032ba59a">More...</a><br /></td></tr>
 <tr class="separator:a87a2c7eb0752860a6da20e46032ba59a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabaf905a434caca6ce0368e4dfee180b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="error_8h.html#aabaf905a434caca6ce0368e4dfee180b">SP_NORMALIZE_ERROR</a>(cond)&#160;&#160;&#160;((cond) ? 0 : -1)</td></tr>
+<tr class="memdesc:aabaf905a434caca6ce0368e4dfee180b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Normalize a condition to 0 or -1, suitable for returning from a function.  <a href="error_8h.html#aabaf905a434caca6ce0368e4dfee180b">More...</a><br /></td></tr>
+<tr class="separator:aabaf905a434caca6ce0368e4dfee180b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Error handling API. </p>
@@ -176,6 +180,35 @@ Macros</h2></td></tr>
 </dl>
 
 <p class="definition">Definition at line <a class="el" href="error_8h_source.html#l00028">28</a> of file <a class="el" href="error_8h_source.html">error.h</a>.</p>
+
+</div>
+</div>
+<a id="aabaf905a434caca6ce0368e4dfee180b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aabaf905a434caca6ce0368e4dfee180b">&#9670;&nbsp;</a></span>SP_NORMALIZE_ERROR</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define SP_NORMALIZE_ERROR</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">cond</td><td>)</td>
+          <td>&#160;&#160;&#160;((cond) ? 0 : -1)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Normalize a condition to 0 or -1, suitable for returning from a function. </p>
+<p>If cond is true (non-zero), select 0. Otherwise, select -1.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">cond</td><td>condition to normalize </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="error_8h_source.html#l00037">37</a> of file <a class="el" href="error_8h_source.html">error.h</a>.</p>
 
 </div>
 </div>

@@ -41,6 +41,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">libsubprocess
    </div>
+   <div id="projectbrief">A subprocess library for C</div>
   </td>
  </tr>
  </tbody>
@@ -113,7 +114,9 @@ $(document).ready(function(){initNavTree('error_8h_source.html',''); initResizab
 <div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="error_8h.html#a87a2c7eb0752860a6da20e46032ba59a">   28</a></span>&#160;<span class="preprocessor">#define SP_ERROR_MSG(fmt, ...) \</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">    fprintf(stderr, &quot;SP: &quot;</span> fmt &quot;: %s\n&quot;, ##__VA_ARGS__, strerror(errno))</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#endif  </span><span class="comment">// SP_ERROR_H</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="error_8h.html#aabaf905a434caca6ce0368e4dfee180b">   37</a></span>&#160;<span class="preprocessor">#define SP_NORMALIZE_ERROR(cond) ((cond) ? 0 : -1)</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="preprocessor">#endif  </span><span class="comment">// SP_ERROR_H</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
