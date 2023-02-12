@@ -9,14 +9,49 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-// Dupe a NULL terminated array
+/**
+ * Free a NULL terminated array of strings.
+ *
+ * @param[in,out] arr
+ */
+static void free_array(char** arr) {
+    if (!arr) {
+        return;
+    }
+    for (int i = 0; arr[i]; i++) {
+        free(arr[i]);
+    }
+    free(arr);
+}
+
+/**
+ * Dupe a NULL terminated array of strings.
+ *
+ * @param[in] arr
+ * @return a copy of arr or NULL on error
+ */
 static char** dupe_array(char** arr) {
     char** dupeArr = malloc(sizeof(char*));
+    int size = 1;
     int i;
+    char** tmp;
     for (i = 0; arr[i]; i++) {
-        // Keep room for NULL byte at the end
-        dupeArr = realloc(dupeArr, sizeof(char*) * (i + 2));
+        if (i == size - 1) {
+            // Double strategy with room for NULL byte at the end
+            size *= 2;
+            tmp = realloc(dupeArr, sizeof(char*) * size);
+            if (!tmp) {
+                dupeArr[i] = NULL;
+                free_array(dupeArr);
+                return NULL;
+            }
+            dupeArr = tmp;
+        }
         dupeArr[i] = strdup(arr[i]);
+        if (!dupeArr[i]) {
+            free_array(dupeArr);
+            return NULL;
+        }
     }
     dupeArr[i] = NULL;
     return dupeArr;
@@ -324,12 +359,7 @@ void sp_destroy(SP_Process* proc) {
         sp_kill(proc);
         sp_wait(proc);
     }
-    if (proc->argv) {
-        for (int i = 0; proc->argv[i]; i++) {
-            free(proc->argv[i]);
-        }
-        free(proc->argv);
-    }
+    free_array(proc->argv);
     safe_fclose(proc->stdin);
     safe_fclose(proc->stderr);
     safe_fclose(proc->stdout);
