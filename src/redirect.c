@@ -6,20 +6,50 @@
 #include "subprocess/error.h"
 #include "subprocess/pipe.h"
 
+/**
+ * dup2() oldFd to newFd.
+ *
+ * @param[in] oldFd
+ * @param[in] newFd
+ * @return 0 on success, -1 on error and errno is set.
+ */
 static int sp_dup2(int oldFd, int newFd) {
     return dup2(oldFd, newFd) < 0 ? -1 : 0;
 }
 
+/**
+ * dup2() oldFd to newFd and close oldFd.
+ *
+ * @param[in] oldFd
+ * @param[in] newFd
+ * @return 0 on success, -1 on error and errno is set.
+ */
 static int sp_dup2_close(int oldFd, int newFd) {
     return !sp_dup2(oldFd, newFd) && !close(oldFd) ? 0 : -1;
 }
 
-// dup2 the one end of the pipe and close them both.
+/**
+ * dup2() the the correct end of the pipe and close both ends.
+ * If newFd is 0 then the read end of the pipe is dup2()'d to newFd.
+ * Otherwise the write end of the pipe is dup2()'d to newFd.
+ *
+ * @param[in,out] pipeFd
+ * @param[in] newFd
+ * @return 0 on success, -1 on error and errno is set.
+ */
 static int sp_dup2_pipe(int pipeFd[2], int newFd) {
     int oldFd = !newFd ? pipeFd[0] : pipeFd[1];
     return !sp_dup2(oldFd, newFd) && !sp_pipe_close(pipeFd) ? 0 : -1;
 }
 
+/**
+ * Calls freopen() on the stream matching the given target.
+ *
+ * @param[in] path
+ * @param[in] target
+ * @param[in] append if true append to the given path when writing.
+ * @return 0 on success, -1 on error and errno is set.
+ */
 static int sp_freopen(char* path, SP_RedirTarget target, bool append) {
     if (!path) {
         errno = EINVAL;
@@ -38,10 +68,6 @@ static int sp_freopen(char* path, SP_RedirTarget target, bool append) {
     }
 }
 
-// Redirect stdin/stdout/stderr
-// Should be called in the child
-// On success returns 0,
-// On failure outputs error information, sets errno and returns -1
 int sp_redirect(SP_RedirOpt* opts, SP_RedirTarget target) {
     if (!opts) {
         errno = EINVAL;

@@ -12,6 +12,15 @@
 #include "subprocess/redirect.h"
 
 /**
+ * Close the file descriptor and set it to -1.
+ * If the fd is already closed (-1) then nothing is done.
+ *
+ * @param[in,out] fd the file descriptor being closed.
+ * @return 0 on success, -1 on error and errno is set by close(2).
+ */
+int sp_fd_close(int* fd);
+
+/**
  * Create a pipe at opt->value.pipeFd with the O_CLOEXEC flag.
  * If nonBlocking is true the O_NONBLOCK flag is also applied.
  * If opt->type is SP_REDIR_BYTES the data is written to the pipe as soon as it is created,
