@@ -47,7 +47,7 @@ Test(force, sp_signal) {
 Test(force, sp_poll) {
     cr_assert(eq(int, sp_poll(proc), -1));
     sp_kill(proc);
-    usleep(1000);
+    sp_wait(proc);
     cr_assert(eq(int, sp_poll(proc), SIGKILL + SP_SIGNAL_OFFSET));
     cr_assert(eq(int, proc->exitCode, SIGKILL + SP_SIGNAL_OFFSET));
 }
