@@ -14,7 +14,7 @@
  * @return 0 on success, -1 on error and errno is set.
  */
 static int sp_dup2(int oldFd, int newFd) {
-    return dup2(oldFd, newFd) < 0 ? -1 : 0;
+    return SP_NORMALIZE_ERROR(dup2(oldFd, newFd) >= 0);
 }
 
 /**
@@ -25,7 +25,7 @@ static int sp_dup2(int oldFd, int newFd) {
  * @return 0 on success, -1 on error and errno is set.
  */
 static int sp_dup2_close(int oldFd, int newFd) {
-    return !sp_dup2(oldFd, newFd) && !close(oldFd) ? 0 : -1;
+    return SP_NORMALIZE_ERROR(!sp_dup2(oldFd, newFd) && !close(oldFd));
 }
 
 /**
@@ -39,7 +39,7 @@ static int sp_dup2_close(int oldFd, int newFd) {
  */
 static int sp_dup2_pipe(int pipeFd[2], int newFd) {
     int oldFd = !newFd ? pipeFd[0] : pipeFd[1];
-    return !sp_dup2(oldFd, newFd) && !sp_pipe_close(pipeFd) ? 0 : -1;
+    return SP_NORMALIZE_ERROR(!sp_dup2(oldFd, newFd) && !sp_pipe_close(pipeFd));
 }
 
 /**
@@ -57,11 +57,11 @@ static int sp_freopen(char* path, SP_RedirTarget target, bool append) {
     }
     switch (target) {
     case SP_STDIN_FILENO:
-        return freopen(path, "r", stdin) ? 0 : -1;
+        return SP_NORMALIZE_ERROR(freopen(path, "r", stdin));
     case SP_STDOUT_FILENO:
-        return freopen(path, append ? "a" : "w", stdout) ? 0 : -1;
+        return SP_NORMALIZE_ERROR(freopen(path, append ? "a" : "w", stdout));
     case SP_STDERR_FILENO:
-        return freopen(path, append ? "a" : "w", stderr) ? 0 : -1;
+        return SP_NORMALIZE_ERROR(freopen(path, append ? "a" : "w", stderr));
     default:
         errno = EINVAL;
         return -1;

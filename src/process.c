@@ -75,10 +75,10 @@ static void safe_fclose(FILE* file) {
  * @return 0 on success, -1 on error
  */
 static int sp_create_pipes(SP_Opts* opts) {
-    int cond = !sp_pipe_create(&opts->stdin, opts->nonBlockingPipes) &&
-               !sp_pipe_create(&opts->stdout, opts->nonBlockingPipes) &&
-               !sp_pipe_create(&opts->stderr, opts->nonBlockingPipes);
-    return cond ? 0 : -1;
+    return SP_NORMALIZE_ERROR(
+        !sp_pipe_create(&opts->stdin, opts->nonBlockingPipes) &&
+        !sp_pipe_create(&opts->stdout, opts->nonBlockingPipes) &&
+        !sp_pipe_create(&opts->stderr, opts->nonBlockingPipes));
 }
 
 /**

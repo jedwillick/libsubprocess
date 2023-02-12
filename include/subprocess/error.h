@@ -28,4 +28,12 @@
 #define SP_ERROR_MSG(fmt, ...) \
     fprintf(stderr, "SP: " fmt ": %s\n", ##__VA_ARGS__, strerror(errno))
 
+/**
+ * Normalize a condition to 0 or -1, suitable for returning from a function.
+ * If cond is true (non-zero), select 0. Otherwise, select -1.
+ *
+ * @param[in] cond condition to normalize
+ */
+#define SP_NORMALIZE_ERROR(cond) ((cond) ? 0 : -1)
+
 #endif  // SP_ERROR_H

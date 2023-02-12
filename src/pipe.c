@@ -7,6 +7,8 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "subprocess/error.h"
+
 int sp_fd_close(int* fd) {
     if (!fd || *fd < 0) {
         return 0;
@@ -33,7 +35,7 @@ FILE* sp_pipe_fdopen(int fd[2], bool isInput) {
 }
 
 int sp_pipe_close(int fd[2]) {
-    return !sp_fd_close(&fd[0]) && !sp_fd_close(&fd[1]) ? 0 : -1;
+    return SP_NORMALIZE_ERROR(!sp_fd_close(&fd[0]) && !sp_fd_close(&fd[1]));
 }
 
 int sp_pipe_create(SP_RedirOpt* opt, bool nonBlocking) {
