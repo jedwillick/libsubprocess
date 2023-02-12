@@ -266,6 +266,10 @@ SP_Process* sp_open(char** argv, SP_Opts* opts) {
         return NULL;
     }
     SP_Process* proc = calloc(1, sizeof *proc);
+    if (!proc) {
+        return NULL;
+    }
+
     if (opts && sp_create_pipes(opts) < 0) {
         sp_destroy(proc);
         return NULL;
