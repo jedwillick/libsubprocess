@@ -111,6 +111,7 @@ static SP_RedirOpt* sp_fd_to_redir_opts(SP_Opts* opts, SP_RedirTarget target) {
     case SP_STDERR_FILENO:
         return &opts->stderr;
     default:
+        errno = EINVAL;
         return NULL;
     }
 }
