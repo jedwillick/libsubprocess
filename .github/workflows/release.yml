@@ -1,0 +1,37 @@
+name: "Release"
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  release:
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-22.04
+    outputs:
+      releases_created: ${{ steps.release.outputs.releases_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - uses: google-github-actions/release-please-action@v3
+        id: release
+        with:
+          release-type: simple
+          package-name: libsubprocess
+          extra-files: |
+            Makefile
+  assets:
+    needs: release
+    if: ${{ needs.release.outputs.releases_created }}
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: "Upload assets"
+        env:
+          TAG: ${{ needs.release.outputs.tag_name }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          make INSTALL_PREFIX=libsubprocess-${TAG} install
+          tar -czvf libsubprocess-${TAG}-linux-x86_64.tar.gz libsubprocess-${TAG}
+          gh release upload ${TAG} libsubprocess-${TAG}-linux-x86_64.tar.gz

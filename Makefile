@@ -2,6 +2,8 @@ CC = gcc
 CFLAGS := -std=gnu99 -MMD -Wall -pedantic -Iinclude/
 DEBUG_CFLAGS = -g -Og -DDEBUG
 
+VERSION = 1.0.0 # x-release-please-version
+
 TARGET_STATIC = libsubprocess.a
 TARGET_SHARED = libsubprocess.so
 SRCS := $(wildcard src/*.c)
