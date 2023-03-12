@@ -2,7 +2,8 @@ CC = gcc
 CFLAGS := -std=gnu99 -MMD -Wall -pedantic -Iinclude/
 DEBUG_CFLAGS = -g -Og -DDEBUG
 
-TARGET = libsubprocess.so
+TARGET_STATIC = libsubprocess.a
+TARGET_SHARED = libsubprocess.so
 SRCS := $(wildcard src/*.c)
 OBJS := $(patsubst src/%.c,build/%.o, $(SRCS))
 
@@ -13,30 +14,35 @@ TEST_OPTS ?=
 
 VALGRIND = valgrind -s --leak-check=full --show-leak-kinds=all --trace-children=yes --trace-children-skip="/usr/bin/*"
 MEMCHECK_TARGET = test/memcheck
-TARGETS := $(TARGET) $(TEST_TARGET) $(MEMCHECK_TARGET)
+TARGETS := $(TARGET_SHARED) $(TARGET_STATIC) $(TEST_TARGET) $(MEMCHECK_TARGET)
 
 COVERAGE_DIR=coverage
 COVERAGE_INFO=coverage.info
 
 INSTALL_PREFIX ?= /usr/local
 
-.PHONY: all
-all: $(TARGETS)
+CREATE_BUILD_DIRS := $(shell mkdir -p build/)
 
-$(TARGET): CFLAGS += -O3 -fPIC
-$(TARGET): LDFLAGS += -shared
-$(TARGET): $(OBJS)
+.PHONY: all
+all: $(TARGET_SHARED) $(TARGET_STATIC)
+
+$(TARGET_SHARED): LDFLAGS += -shared
+$(TARGET_SHARED): $(OBJS)
 	$(CC) $(LDFLAGS) $(GCOV) -o $@ $(LDLIBS) $^
 
+
+$(TARGET_STATIC): $(OBJS)
+	ar rcs $@ $^
+
+build/%.o: CFLAGS += -O3 -fPIC
 build/%.o: src/%.c
-	@mkdir -p build/
 	$(CC) $(CFLAGS) $(GCOV) -c -o $@ $<
 
 -include $(OBJS:.o=.d)
 
 .PHONY: debug
 debug: CFLAGS += $(DEBUG_CFLAGS)
-debug: clean $(TARGET)
+debug: clean all
 
 .PHONY: criterion
 criterion:
@@ -48,7 +54,7 @@ criterion:
 	fi
 
 .PHONY: test
-test: $(TARGET) criterion $(TEST_TARGET)
+test: $(TARGET_SHARED) criterion $(TEST_TARGET)
 	LD_LIBRARY_PATH=.:test/criterion/lib:$${LD_LIBRARY_PATH} ./$(TEST_TARGET) $(TEST_OPTS)
 
 $(TEST_TARGET): LDFLAGS += -Ltest/criterion/lib -L.
@@ -58,7 +64,6 @@ $(TEST_TARGET): $(TEST_OBJS)
 	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
 build/%.o: test/%.c
-	@mkdir -p build/
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 -include $(TEST_OBJS:.o=.d)
@@ -69,7 +74,7 @@ $(MEMCHECK_TARGET): LDFLAGS += -L.
 $(MEMCHECK_TARGET): test/memcheck.c
 
 .PHONY: memcheck
-memcheck: $(TARGET) $(MEMCHECK_TARGET)
+memcheck: $(TARGET_SHARED) $(MEMCHECK_TARGET)
 	LD_LIBRARY_PATH=.:$${LD_LIBRARY_PATH} $(VALGRIND) ./test/memcheck
 
 .PHONY: coverage
@@ -88,7 +93,7 @@ coverage-html: coverage
 .PHONY: clean
 clean:
 	rm -f $(TARGETS)
-	rm -rf build/
+	rm -rf build/*
 
 .PHONY: clean-coverage
 clean-coverage:
@@ -99,15 +104,17 @@ format:
 	clang-format -i --verbose $$(git ls-files | grep -E "*\.[ch]")
 
 .PHONY: install
-install: $(TARGET)
+install: $(TARGET_STATIC) $(TARGET_SHARED)
 	mkdir -p $(INSTALL_PREFIX)/lib
 	mkdir -p $(INSTALL_PREFIX)/include
-	cp $(TARGET) $(INSTALL_PREFIX)/lib
+	cp $(TARGET_SHARED) $(INSTALL_PREFIX)/lib
+	cp $(TARGET_STATIC) $(INSTALL_PREFIX)/lib
 	cp -r include/subprocess $(INSTALL_PREFIX)/include
 
 .PHONY: uninstall
 uninstall:
-	rm -f $(INSTALL_PREFIX)/lib/$(TARGET)
+	rm -f $(INSTALL_PREFIX)/lib/$(TARGET_SHARED)
+	rm -f $(INSTALL_PREFIX)/lib/$(TARGET_STATIC)
 	rm -rf $(INSTALL_PREFIX)/include/subprocess
 
 .PHONY: bear
@@ -124,4 +131,3 @@ doc:
 doc-local: doc
 	python3 -m http.server --bind localhost --directory build/doc/html/
 
-subprocess: subprocess.c $(SRCS)

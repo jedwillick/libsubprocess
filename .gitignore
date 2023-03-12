@@ -1,5 +1,6 @@
 *.d
 *.o
+*.a
 *.so
 *.out
 build/

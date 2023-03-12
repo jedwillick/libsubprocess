@@ -26,7 +26,7 @@ git clone git@github.com:jedwillick/libsubprocess.git
 cd libsubprocess
 ```
 
-Then you can build and install it as a shared library that can be dynamically linked
+Then you can build and install both the shared and static library.
 
 ```bash
 # By default installs to /usr/local so sudo is needed.
@@ -36,8 +36,6 @@ sudo ldconfig
 # You can also specify the install location:
 INSTALL_PREFIX=~/.local make install
 ```
-
-Then use the `-lsubprocess` flag when linking.
 
 Alternatively you can compile the library with your source files by copying everything
 from `src/` and `include/` to your local source tree.
