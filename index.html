@@ -116,15 +116,14 @@ Installation</h1>
 <p>First clone the repository</p>
 <div class="fragment"><div class="line">git clone git@github.com:jedwillick/libsubprocess.git</div>
 <div class="line">cd libsubprocess</div>
-</div><!-- fragment --><p>Then you can build and install it as a shared library that can be dynamically linked</p>
+</div><!-- fragment --><p>Then you can build and install both the shared and static library.</p>
 <div class="fragment"><div class="line"># By default installs to /usr/local so sudo is needed.</div>
 <div class="line">sudo make install</div>
 <div class="line">sudo ldconfig</div>
 <div class="line"> </div>
 <div class="line"># You can also specify the install location:</div>
 <div class="line">INSTALL_PREFIX=~/.local make install</div>
-</div><!-- fragment --><p>Then use the <code>-lsubprocess</code> flag when linking.</p>
-<p>Alternatively you can compile the library with your source files by copying everything from <code>src/</code> and <code>include/</code> to your local source tree.</p>
+</div><!-- fragment --><p>Alternatively you can compile the library with your source files by copying everything from <code>src/</code> and <code>include/</code> to your local source tree.</p>
 <div class="fragment"><div class="line">curl -Lo- https://github.com/jedwillick/libsubprocess/archive/main.tar.gz \</div>
 <div class="line">  | tar -xzvk --strip-components=1 libsubprocess-main/src libsubprocess-main/include</div>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md3"></a>
