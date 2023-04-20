@@ -64,9 +64,10 @@ sp_destroy(proc);
 We can also capture that output by redirecting stdout to a pipe.
 
 ```c
-SP_Process* proc = sp_run(SP_ARGV("echo", "Hello world!"), SP_OPTS(.stdout = SP_REDIR_PIPE()));
+SP_Process* proc =
+    sp_run(SP_ARGV("echo", "Hello world!"), SP_OPTS(.stdout = SP_REDIR_PIPE()));
 if (!proc) {
-    return 1;
+    return;
 }
 char buf[124];
 while ((fgets(buf, 124, proc->stdout))) {
@@ -79,11 +80,13 @@ Instead of printing the output we can pass it along to another process just like
 doing `echo "Hello world!" | tr [a-z] [A-Z]`
 
 ```c
-SP_Process* proc = sp_run(SP_ARGV("echo", "Hello world!"), SP_OPTS(.stdout = SP_REDIR_PIPE()));
+SP_Process* proc =
+    sp_run(SP_ARGV("echo", "Hello world!"), SP_OPTS(.stdout = SP_REDIR_PIPE()));
 if (!proc) {
-    return 1;
+    return;
 }
-SP_Process* proc2 = sp_run(SP_ARGV("tr", "[a-z]", "[A-Z]"), SP_OPTS(.stdin = SP_REDIR_FILE(proc->stdout)));
+SP_Process* proc2 = sp_run(SP_ARGV("tr", "[a-z]", "[A-Z]"),
+                           SP_OPTS(.stdin = SP_REDIR_FILE(proc->stdout)));
 sp_destroy(proc);
 sp_destroy(proc2);
 ```
@@ -92,16 +95,16 @@ We could than redirect that output to a file mimicking
 `echo "Hello world!" | tr [a-z] [A-Z] > sp-hello-world.txt`
 
 ```c
-SP_Process* proc = sp_run(SP_ARGV("echo", "Hello world!"), SP_OPTS(.stdout = SP_REDIR_PIPE()));
+SP_Process* proc =
+    sp_run(SP_ARGV("echo", "Hello world!"), SP_OPTS(.stdout = SP_REDIR_PIPE()));
 if (!proc) {
-    return 1;
+    return;
 }
 
-SP_Opts opts = { // For style reasons I decided to not use the inline SP_OPTS macro.
-    .stdin = SP_REDIR_FILE(proc->stdout),
-    .stdout = SP_REDIR_PATH("sp-hello-world.txt"),
-};
-SP_Process* proc2 = sp_run(SP_ARGV("tr", "[a-z]", "[A-Z]"), &opts);
+SP_Process* proc2 =
+    sp_run(SP_ARGV("tr", "[a-z]", "[A-Z]"),
+           SP_OPTS(.stdin = SP_REDIR_FILE(proc->stdout),
+                   .stdout = SP_REDIR_PATH("sp-hello-world.txt")));
 sp_destroy(proc);
 sp_destroy(proc2);
 ```
@@ -112,18 +115,16 @@ Finally we can bring it all together as a complete program `example.c`
 #include <subprocess/process.h>
 
 int main(void) {
-    SP_Process *proc = sp_run(SP_ARGV("echo", "Hello world!"),
+    SP_Process* proc = sp_run(SP_ARGV("echo", "Hello world!"),
                               SP_OPTS(.stdout = SP_REDIR_PIPE()));
     if (!proc) {
         return 1;
     }
 
-    SP_Opts opts = {
-        // For style reasons I decided to not use the inline SP_OPTS macro.
-        .stdin = SP_REDIR_FILE(proc->stdout),
-        .stdout = SP_REDIR_PATH("sp-hello-world.txt"),
-    };
-    SP_Process *proc2 = sp_run(SP_ARGV("tr", "[a-z]", "[A-Z]"), &opts);
+    SP_Process* proc2 =
+        sp_run(SP_ARGV("tr", "[a-z]", "[A-Z]"),
+               SP_OPTS(.stdin = SP_REDIR_FILE(proc->stdout),
+                       .stdout = SP_REDIR_PATH("sp-hello-world.txt")));
     sp_destroy(proc);
     sp_destroy(proc2);
 }
