@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/jedwillick/libsubprocess/compare/v1.0.0...v2.0.0) (2024-04-25)
+
+
+### ⚠ BREAKING CHANGES
+
+* adds sp prefix to stdin, stdout, and stderr variables in
+
+### Code Refactoring
+
+* adds sp prefix to stdin, stdout, and stderr variables in ([1ef780e](https://github.com/jedwillick/libsubprocess/commit/1ef780e91aaf6f6c85e3eab670fdfc745524f6b3))
+
 ## 1.0.0 (2023-03-12)
 
 
