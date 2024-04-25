@@ -84,10 +84,8 @@ typedef struct sp_opts {
  *
  * @param[in] ... char*'s
  */
-#define SP_ARGV(...)      \
-    (char*[]) {           \
-        __VA_ARGS__, NULL \
-    }
+#define SP_ARGV(...) \
+    (char*[]) { __VA_ARGS__, NULL }
 
 /**
  * A convenience macro for creating SP_Opts for sp_run() and sp_open()
