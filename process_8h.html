@@ -138,7 +138,7 @@ Macros</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="process_8h.html#aa2caf31f24b40025bbee85b7fdfde753">SP_SIGNAL_OFFSET</a>&#160;&#160;&#160;128</td></tr>
 <tr class="memdesc:aa2caf31f24b40025bbee85b7fdfde753"><td class="mdescLeft">&#160;</td><td class="mdescRight">Offset added to signal numbers when setting the exit code. <br /></td></tr>
 <tr class="separator:aa2caf31f24b40025bbee85b7fdfde753"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad998ef6e00530713af8d1d5f240add92"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="process_8h.html#ad998ef6e00530713af8d1d5f240add92">SP_ARGV</a>(...)&#160;&#160;&#160;    (char*[]) { __VA_ARGS__, NULL }</td></tr>
+<tr class="memitem:ad998ef6e00530713af8d1d5f240add92"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="process_8h.html#ad998ef6e00530713af8d1d5f240add92">SP_ARGV</a>(...)</td></tr>
 <tr class="memdesc:ad998ef6e00530713af8d1d5f240add92"><td class="mdescLeft">&#160;</td><td class="mdescRight">A convenience macro for creating a NULL terminated array of char*'s.  <a href="process_8h.html#ad998ef6e00530713af8d1d5f240add92">More...</a><br /></td></tr>
 <tr class="separator:ad998ef6e00530713af8d1d5f240add92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab69431fc6b0d054abd4dfc2f7ce5f3ae"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="process_8h.html#ab69431fc6b0d054abd4dfc2f7ce5f3ae">SP_OPTS</a>(...)&#160;&#160;&#160;&amp;((<a class="el" href="process_8h.html#a7b03745c1b71cb42e165c6a66d7fea58">SP_Opts</a>){__VA_ARGS__})</td></tr>
@@ -217,11 +217,14 @@ Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname"><em>...</em></td><td>)</td>
-          <td>&#160;&#160;&#160;    (char*[]) { __VA_ARGS__, NULL }</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
+<b>Value:</b><div class="fragment"><div class="line">    (<span class="keywordtype">char</span>*[]) {           \</div>
+<div class="line">        __VA_ARGS__, NULL \</div>
+<div class="line">    }</div>
+</div><!-- fragment -->
 <p>A convenience macro for creating a NULL terminated array of char*'s. </p>
 <p>Useful for creating the argv argument to <a class="el" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969" title="Run a process with the given options and wait for it to finish.">sp_run()</a> and <a class="el" href="process_8h.html#a1867fbb98e4e26dd0069541374033ba1" title="Open a process with the given options and return a pointer to it.">sp_open()</a>. <br  />
  Example: </p><div class="fragment"><div class="line"><a class="code" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969">sp_run</a>(<a class="code" href="process_8h.html#ad998ef6e00530713af8d1d5f240add92">SP_ARGV</a>(<span class="stringliteral">&quot;ls&quot;</span>, <span class="stringliteral">&quot;-al&quot;</span>), 0);</div>
@@ -258,7 +261,7 @@ Functions</h2></td></tr>
 <p>A convenience macro for creating SP_Opts for <a class="el" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969" title="Run a process with the given options and wait for it to finish.">sp_run()</a> and <a class="el" href="process_8h.html#a1867fbb98e4e26dd0069541374033ba1" title="Open a process with the given options and return a pointer to it.">sp_open()</a> <br  />
  Example: </p>
 <div class="fragment"><div class="line"><a class="code" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969">sp_run</a>(<a class="code" href="process_8h.html#ad998ef6e00530713af8d1d5f240add92">SP_ARGV</a>(<span class="stringliteral">&quot;ls&quot;</span>), <a class="code" href="process_8h.html#ab69431fc6b0d054abd4dfc2f7ce5f3ae">SP_OPTS</a>(.cwd=<span class="stringliteral">&quot;/etc&quot;</span>, .detach=<span class="keyword">true</span>));</div>
-<div class="ttc" id="aprocess_8h_html_ab69431fc6b0d054abd4dfc2f7ce5f3ae"><div class="ttname"><a href="process_8h.html#ab69431fc6b0d054abd4dfc2f7ce5f3ae">SP_OPTS</a></div><div class="ttdeci">#define SP_OPTS(...)</div><div class="ttdoc">A convenience macro for creating SP_Opts for sp_run() and sp_open()   Example:</div><div class="ttdef"><b>Definition:</b> <a href="process_8h_source.html#l00106">process.h:106</a></div></div>
+<div class="ttc" id="aprocess_8h_html_ab69431fc6b0d054abd4dfc2f7ce5f3ae"><div class="ttname"><a href="process_8h.html#ab69431fc6b0d054abd4dfc2f7ce5f3ae">SP_OPTS</a></div><div class="ttdeci">#define SP_OPTS(...)</div><div class="ttdoc">A convenience macro for creating SP_Opts for sp_run() and sp_open()   Example:</div><div class="ttdef"><b>Definition:</b> <a href="process_8h_source.html#l00108">process.h:108</a></div></div>
 </div><!-- fragment --><p> expands to: </p><div class="fragment"><div class="line"><a class="code" href="process_8h.html#a1937a5defc5a604e0c4e4dff0e0f9969">sp_run</a>((<span class="keywordtype">char</span>*[]){<span class="stringliteral">&quot;ls&quot;</span>, NULL}, &amp;((<a class="code" href="process_8h.html#a7b03745c1b71cb42e165c6a66d7fea58">SP_Opts</a>){.cwd=<span class="stringliteral">&quot;/etc&quot;</span>, .detach=<span class="keyword">true</span>}));</div>
 <div class="ttc" id="aprocess_8h_html_a7b03745c1b71cb42e165c6a66d7fea58"><div class="ttname"><a href="process_8h.html#a7b03745c1b71cb42e165c6a66d7fea58">SP_Opts</a></div><div class="ttdeci">struct sp_opts SP_Opts</div><div class="ttdoc">A struct containing options when spawning a process.</div></div>
 </div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
@@ -271,7 +274,7 @@ Functions</h2></td></tr>
 <dd>
 <a class="el" href="process_8h.html#ad998ef6e00530713af8d1d5f240add92" title="A convenience macro for creating a NULL terminated array of char*&#39;s.">SP_ARGV()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="process_8h_source.html#l00106">106</a> of file <a class="el" href="process_8h_source.html">process.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="process_8h_source.html#l00108">108</a> of file <a class="el" href="process_8h_source.html">process.h</a>.</p>
 
 </div>
 </div>
@@ -299,7 +302,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="process_8h_source.html#l00113">113</a> of file <a class="el" href="process_8h_source.html">process.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="process_8h_source.html#l00115">115</a> of file <a class="el" href="process_8h_source.html">process.h</a>.</p>
 
 </div>
 </div>
@@ -336,7 +339,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>A struct containing data pertintent to a process. </p>
-<p><a class="el" href="structsp__process.html#a5cbad84560a262db4c4ae9c84fac2a6b" title="stdin of process">sp_process::stdin</a>, <a class="el" href="structsp__process.html#a36cba2ef4dc780c4ae9fe5471a74f1bf" title="stdout of process">sp_process::stdout</a>, and <a class="el" href="structsp__process.html#afc34f2e47df5ffd712e2c37723f62459" title="stderr of process">sp_process::stderr</a> are only opened if the corresponding option in <a class="el" href="structsp__opts.html" title="A struct containing options when spawning a process.">sp_opts</a> specifies sp_redir_type::SP_REDIR_PIPE.</p>
+<p><a class="el" href="structsp__process.html#a244f476ed5fba1388d4e83bde0e0ec9b" title="stdin of process">sp_process::spstdin</a>, <a class="el" href="structsp__process.html#aca89db31e516a011444acfe2fd758750" title="stdout of process">sp_process::spstdout</a>, and <a class="el" href="structsp__process.html#a78b79eb577c00e6f921a1275724c86a2" title="stderr of process">sp_process::spstderr</a> are only opened if the corresponding option in <a class="el" href="structsp__opts.html" title="A struct containing options when spawning a process.">sp_opts</a> specifies sp_redir_type::SP_REDIR_PIPE.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="process_8h.html#a09b4af7642006c7e8eaa03a05e9dbf82" title="Free all memory allocated to an sp_process.">sp_destroy</a> </dd></dl>
 
 </div>

@@ -126,22 +126,22 @@ char **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="s
 int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structsp__process.html#ab557c6d642604af9c8b8db23f976580f">exitCode</a></td></tr>
 <tr class="memdesc:ab557c6d642604af9c8b8db23f976580f"><td class="mdescLeft">&#160;</td><td class="mdescRight">exit code of process or -1 if status != SP_STATUS_DEAD <br /></td></tr>
 <tr class="separator:ab557c6d642604af9c8b8db23f976580f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5cbad84560a262db4c4ae9c84fac2a6b"><td class="memItemLeft" align="right" valign="top"><a id="a5cbad84560a262db4c4ae9c84fac2a6b"></a>
-FILE *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structsp__process.html#a5cbad84560a262db4c4ae9c84fac2a6b">stdin</a></td></tr>
-<tr class="memdesc:a5cbad84560a262db4c4ae9c84fac2a6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">stdin of process <br /></td></tr>
-<tr class="separator:a5cbad84560a262db4c4ae9c84fac2a6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36cba2ef4dc780c4ae9fe5471a74f1bf"><td class="memItemLeft" align="right" valign="top"><a id="a36cba2ef4dc780c4ae9fe5471a74f1bf"></a>
-FILE *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structsp__process.html#a36cba2ef4dc780c4ae9fe5471a74f1bf">stdout</a></td></tr>
-<tr class="memdesc:a36cba2ef4dc780c4ae9fe5471a74f1bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">stdout of process <br /></td></tr>
-<tr class="separator:a36cba2ef4dc780c4ae9fe5471a74f1bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc34f2e47df5ffd712e2c37723f62459"><td class="memItemLeft" align="right" valign="top"><a id="afc34f2e47df5ffd712e2c37723f62459"></a>
-FILE *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structsp__process.html#afc34f2e47df5ffd712e2c37723f62459">stderr</a></td></tr>
-<tr class="memdesc:afc34f2e47df5ffd712e2c37723f62459"><td class="mdescLeft">&#160;</td><td class="mdescRight">stderr of process <br /></td></tr>
-<tr class="separator:afc34f2e47df5ffd712e2c37723f62459"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a244f476ed5fba1388d4e83bde0e0ec9b"><td class="memItemLeft" align="right" valign="top"><a id="a244f476ed5fba1388d4e83bde0e0ec9b"></a>
+FILE *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structsp__process.html#a244f476ed5fba1388d4e83bde0e0ec9b">spstdin</a></td></tr>
+<tr class="memdesc:a244f476ed5fba1388d4e83bde0e0ec9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">stdin of process <br /></td></tr>
+<tr class="separator:a244f476ed5fba1388d4e83bde0e0ec9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca89db31e516a011444acfe2fd758750"><td class="memItemLeft" align="right" valign="top"><a id="aca89db31e516a011444acfe2fd758750"></a>
+FILE *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structsp__process.html#aca89db31e516a011444acfe2fd758750">spstdout</a></td></tr>
+<tr class="memdesc:aca89db31e516a011444acfe2fd758750"><td class="mdescLeft">&#160;</td><td class="mdescRight">stdout of process <br /></td></tr>
+<tr class="separator:aca89db31e516a011444acfe2fd758750"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78b79eb577c00e6f921a1275724c86a2"><td class="memItemLeft" align="right" valign="top"><a id="a78b79eb577c00e6f921a1275724c86a2"></a>
+FILE *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structsp__process.html#a78b79eb577c00e6f921a1275724c86a2">spstderr</a></td></tr>
+<tr class="memdesc:a78b79eb577c00e6f921a1275724c86a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">stderr of process <br /></td></tr>
+<tr class="separator:a78b79eb577c00e6f921a1275724c86a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A struct containing data pertintent to a process. </p>
-<p><a class="el" href="structsp__process.html#a5cbad84560a262db4c4ae9c84fac2a6b" title="stdin of process">sp_process::stdin</a>, <a class="el" href="structsp__process.html#a36cba2ef4dc780c4ae9fe5471a74f1bf" title="stdout of process">sp_process::stdout</a>, and <a class="el" href="structsp__process.html#afc34f2e47df5ffd712e2c37723f62459" title="stderr of process">sp_process::stderr</a> are only opened if the corresponding option in <a class="el" href="structsp__opts.html" title="A struct containing options when spawning a process.">sp_opts</a> specifies sp_redir_type::SP_REDIR_PIPE.</p>
+<p><a class="el" href="structsp__process.html#a244f476ed5fba1388d4e83bde0e0ec9b" title="stdin of process">sp_process::spstdin</a>, <a class="el" href="structsp__process.html#aca89db31e516a011444acfe2fd758750" title="stdout of process">sp_process::spstdout</a>, and <a class="el" href="structsp__process.html#a78b79eb577c00e6f921a1275724c86a2" title="stderr of process">sp_process::spstderr</a> are only opened if the corresponding option in <a class="el" href="structsp__opts.html" title="A struct containing options when spawning a process.">sp_opts</a> specifies sp_redir_type::SP_REDIR_PIPE.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="process_8h.html#a09b4af7642006c7e8eaa03a05e9dbf82" title="Free all memory allocated to an sp_process.">sp_destroy</a> </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="process_8h_source.html#l00038">38</a> of file <a class="el" href="process_8h_source.html">process.h</a>.</p>
