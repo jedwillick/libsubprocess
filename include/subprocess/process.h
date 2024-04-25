@@ -29,7 +29,7 @@ typedef enum sp_status {
 
 /**
  * A struct containing data pertintent to a process.
- * sp_process::stdin, sp_process::stdout, and sp_process::stderr
+ * sp_process::spstdin, sp_process::spstdout, and sp_process::spstderr
  * are only opened if the corresponding option in sp_opts
  * specifies sp_redir_type::SP_REDIR_PIPE.
  *
@@ -39,10 +39,10 @@ typedef struct sp_process {
     pid_t pid;         ///< process id
     char** argv;       ///< deep clone of argv
     SP_Status status;  ///< status of process
-    int exitCode;  ///< exit code of process or -1 if status != SP_STATUS_DEAD
-    FILE* stdin;   ///< stdin of process
-    FILE* stdout;  ///< stdout of process
-    FILE* stderr;  ///< stderr of process
+    int exitCode;    ///< exit code of process or -1 if status != SP_STATUS_DEAD
+    FILE* spstdin;   ///< stdin of process
+    FILE* spstdout;  ///< stdout of process
+    FILE* spstderr;  ///< stderr of process
 } SP_Process;
 
 /**
@@ -57,9 +57,9 @@ typedef struct sp_opts {
     bool detach;      ///< detach process from parent
     bool inheritFds;  ///< don't attempt to close other open file descriptors.
     bool nonBlockingPipes;  ///< Make pipes non-blocking.
-    SP_RedirOpt stdin;      ///< options for stdin
-    SP_RedirOpt stdout;     ///< options for stdout
-    SP_RedirOpt stderr;     ///< options for stderr
+    SP_RedirOpt spstdin;    ///< options for stdin
+    SP_RedirOpt spstdout;   ///< options for stdout
+    SP_RedirOpt spstderr;   ///< options for stderr
     /**
     * Specifies the order to attempt redirection.
     * Default order is {0, 1, 2}. stdin then stdout then stderr.
@@ -84,8 +84,10 @@ typedef struct sp_opts {
  *
  * @param[in] ... char*'s
  */
-#define SP_ARGV(...) \
-    (char*[]) { __VA_ARGS__, NULL }
+#define SP_ARGV(...)      \
+    (char*[]) {           \
+        __VA_ARGS__, NULL \
+    }
 
 /**
  * A convenience macro for creating SP_Opts for sp_run() and sp_open()
@@ -159,8 +161,6 @@ int sp_kill(SP_Process* process);
  * @return 1 on success, -1 on error and errno is set accordingly.
  */
 int sp_signal(SP_Process* process, int signal);
-
-// close stdin of process if opened with a pipe.
 
 /**
  * Close stdin of a process if it was opened with a pipe and set it to NULL.

@@ -15,7 +15,7 @@ static void teardown(void) {
 }
 
 static void setup_force(void) {
-    proc = sp_open(SP_ARGV("cat"), SP_OPTS(.stdin = SP_REDIR_PIPE()));
+    proc = sp_open(SP_ARGV("cat"), SP_OPTS(.spstdin = SP_REDIR_PIPE()));
 }
 
 TestSuite(force, .timeout = 10, .init = setup_force, .fini = teardown);
@@ -53,9 +53,9 @@ Test(force, sp_poll) {
 }
 
 Test(force, sp_close) {
-    cr_assert(not(zero(ptr, proc->stdin)));
+    cr_assert(not(zero(ptr, proc->spstdin)));
     sp_close(proc);
-    cr_assert(zero(ptr, proc->stdin));
+    cr_assert(zero(ptr, proc->spstdin));
     sp_wait(proc);
     cr_assert(zero(int, proc->exitCode));
 }
@@ -63,7 +63,7 @@ Test(force, sp_close) {
 static void setup_fails(void) {
     opts = malloc(sizeof *opts);
     *opts = (SP_Opts){
-        .stderr = SP_REDIR_DEVNULL(),
+        .spstderr = SP_REDIR_DEVNULL(),
         .redirOrder = {2, 1, 0},
     };
 }
@@ -87,25 +87,25 @@ Test(fails, not_executable) {
 }
 
 Test(fails, bad_fd) {
-    opts->stdout = SP_REDIR_FD(666);
+    opts->spstdout = SP_REDIR_FD(666);
     proc = sp_run(SP_ARGV("ls"), opts);
     cr_assert(eq(int, proc->exitCode, SP_EXIT_NOT_EXECUTE));
 }
 
 Test(fails, bad_path) {
-    opts->stdin = SP_REDIR_PATH("NOPE");
+    opts->spstdin = SP_REDIR_PATH("NOPE");
     proc = sp_run(SP_ARGV("ls"), opts);
     cr_assert(eq(int, proc->exitCode, SP_EXIT_NOT_EXECUTE));
 }
 
 Test(fails, null_path) {
-    opts->stdin = SP_REDIR_PATH(NULL);
+    opts->spstdin = SP_REDIR_PATH(NULL);
     proc = sp_run(SP_ARGV("ls"), opts);
     cr_assert(eq(int, proc->exitCode, SP_EXIT_NOT_EXECUTE));
 }
 
 Test(fails, null_file) {
-    opts->stdout = SP_REDIR_FILE(NULL);
+    opts->spstdout = SP_REDIR_FILE(NULL);
     proc = sp_run(SP_ARGV("ls"), opts);
     cr_assert(eq(int, proc->exitCode, SP_EXIT_NOT_EXECUTE));
 }
@@ -119,10 +119,10 @@ Test(proc, closesFds) {
     char buf[256];
     snprintf(buf, 256, "%d", proc->pid);
     SP_Process* proc2 = sp_run(SP_ARGV("./test/dump-fds.sh", buf),
-                               SP_OPTS(.stdout = SP_REDIR_PIPE()));
+                               SP_OPTS(.spstdout = SP_REDIR_PIPE()));
     sp_close(proc);
-    while (fgets(buf, 256, proc2->stdout)) {
-        cr_assert(le(int, atoi(buf), STDERR_FILENO));
+    while (fgets(buf, 256, proc2->spstdout)) {
+        cr_assert(le(int, atoi(buf), SP_STDERR_FILENO));
     }
     cr_assert(not(zero(ptr, fgets(buf, 256, file))),
               "File was closed in parent");
@@ -137,11 +137,11 @@ Test(proc, inheritFds) {
     char buf[256];
     snprintf(buf, 256, "%d", proc->pid);
     SP_Process* proc2 = sp_run(SP_ARGV("./test/dump-fds.sh", buf),
-                               SP_OPTS(.stdout = SP_REDIR_PIPE()));
+                               SP_OPTS(.spstdout = SP_REDIR_PIPE()));
     sp_close(proc);
     bool found = false;
-    while (fgets(buf, 256, proc2->stdout)) {
-        if (atoi(buf) > STDERR_FILENO) {
+    while (fgets(buf, 256, proc2->spstdout)) {
+        if (atoi(buf) > SP_STDERR_FILENO) {
             found = true;
         }
     }

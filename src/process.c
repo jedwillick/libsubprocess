@@ -76,9 +76,9 @@ static void safe_fclose(FILE* file) {
  */
 static int sp_create_pipes(SP_Opts* opts) {
     return SP_NORMALIZE_ERROR(
-        !sp_pipe_create(&opts->stdin, opts->nonBlockingPipes) &&
-        !sp_pipe_create(&opts->stdout, opts->nonBlockingPipes) &&
-        !sp_pipe_create(&opts->stderr, opts->nonBlockingPipes));
+        !sp_pipe_create(&opts->spstdin, opts->nonBlockingPipes) &&
+        !sp_pipe_create(&opts->spstdout, opts->nonBlockingPipes) &&
+        !sp_pipe_create(&opts->spstderr, opts->nonBlockingPipes));
 }
 
 /**
@@ -105,11 +105,11 @@ static void check_redirect_order(SP_RedirTarget order[3]) {
 static SP_RedirOpt* sp_fd_to_redir_opts(SP_Opts* opts, SP_RedirTarget target) {
     switch (target) {
     case SP_STDIN_FILENO:
-        return &opts->stdin;
+        return &opts->spstdin;
     case SP_STDOUT_FILENO:
-        return &opts->stdout;
+        return &opts->spstdout;
     case SP_STDERR_FILENO:
-        return &opts->stderr;
+        return &opts->spstderr;
     default:
         errno = EINVAL;
         return NULL;
@@ -117,7 +117,7 @@ static SP_RedirOpt* sp_fd_to_redir_opts(SP_Opts* opts, SP_RedirTarget target) {
 }
 
 /**
- * Redirections stdin, stdout, and stderr as specified in opts.
+ * Redirections for stdin, stdout, and stderr as specified in opts.
  *
  * @param[in,out] opts
  * @return 0 on success, -1 on error
@@ -227,21 +227,21 @@ static int sp_child_exec(char** argv, SP_Opts* opts) {
  */
 static int sp_fdopen_all(SP_Process* proc, SP_Opts* opts) {
     // TODO: remove dupe code
-    if (opts->stdin.type == SP_REDIR_PIPE) {
-        proc->stdin = sp_pipe_fdopen(opts->stdin.value.pipeFd, true);
-        if (!proc->stdin) {
+    if (opts->spstdin.type == SP_REDIR_PIPE) {
+        proc->spstdin = sp_pipe_fdopen(opts->spstdin.value.pipeFd, true);
+        if (!proc->spstdin) {
             return -1;
         }
     }
-    if (opts->stdout.type == SP_REDIR_PIPE) {
-        proc->stdout = sp_pipe_fdopen(opts->stdout.value.pipeFd, false);
-        if (!proc->stdout) {
+    if (opts->spstdout.type == SP_REDIR_PIPE) {
+        proc->spstdout = sp_pipe_fdopen(opts->spstdout.value.pipeFd, false);
+        if (!proc->spstdout) {
             return -1;
         }
     }
-    if (opts->stderr.type == SP_REDIR_PIPE) {
-        proc->stderr = sp_pipe_fdopen(opts->stderr.value.pipeFd, false);
-        if (!proc->stderr) {
+    if (opts->spstderr.type == SP_REDIR_PIPE) {
+        proc->spstderr = sp_pipe_fdopen(opts->spstderr.value.pipeFd, false);
+        if (!proc->spstderr) {
             return -1;
         }
     }
@@ -313,8 +313,8 @@ int sp_signal(SP_Process* proc, int signal) {
 }
 
 void sp_close(SP_Process* proc) {
-    safe_fclose(proc->stdin);
-    proc->stdin = NULL;
+    safe_fclose(proc->spstdin);
+    proc->spstdin = NULL;
 }
 
 /**
@@ -365,8 +365,8 @@ void sp_destroy(SP_Process* proc) {
         sp_wait(proc);
     }
     free_array(proc->argv);
-    safe_fclose(proc->stdin);
-    safe_fclose(proc->stderr);
-    safe_fclose(proc->stdout);
+    safe_fclose(proc->spstdin);
+    safe_fclose(proc->spstderr);
+    safe_fclose(proc->spstdout);
     free(proc);
 }

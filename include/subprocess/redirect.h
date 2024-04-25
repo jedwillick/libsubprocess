@@ -60,16 +60,20 @@ typedef struct sp_redir_opt {
 /**
  * Setup sp_redir_opt to redirect to a pipe.
  */
-#define SP_REDIR_PIPE() \
-    (SP_RedirOpt) { .type = SP_REDIR_PIPE }
+#define SP_REDIR_PIPE()       \
+    (SP_RedirOpt) {           \
+        .type = SP_REDIR_PIPE \
+    }
 
 /**
  * Setup sp_redir_opt to redirect to a file path.
  *
  * @param[in] _path char* holding the file path to redirect to.
  */
-#define SP_REDIR_PATH(_path) \
-    (SP_RedirOpt) { .type = SP_REDIR_PATH, .value.path = (_path) }
+#define SP_REDIR_PATH(_path)                         \
+    (SP_RedirOpt) {                                  \
+        .type = SP_REDIR_PATH, .value.path = (_path) \
+    }
 
 /**
  * Setup sp_redir_opt to redirect to a file path appending the output.
@@ -77,14 +81,18 @@ typedef struct sp_redir_opt {
  *
  * @param[in] _path char* holding the file path to redirect to.
  */
-#define SP_REDIR_APPEND(_path) \
-    (SP_RedirOpt) { .type = SP_REDIR_APPEND, .value.path = (_path) }
+#define SP_REDIR_APPEND(_path)                         \
+    (SP_RedirOpt) {                                    \
+        .type = SP_REDIR_APPEND, .value.path = (_path) \
+    }
 
 /**
  * Setup sp_redir_opt to redirect to /dev/null.
  */
-#define SP_REDIR_DEVNULL() \
-    (SP_RedirOpt) { .type = SP_REDIR_PATH, .value.path = "/dev/null" }
+#define SP_REDIR_DEVNULL()                               \
+    (SP_RedirOpt) {                                      \
+        .type = SP_REDIR_PATH, .value.path = "/dev/null" \
+    }
 
 /**
  * Setup sp_redir_opt to redirect to a FILE*
@@ -101,8 +109,10 @@ typedef struct sp_redir_opt {
  *
  * @param[in] _fd int
  */
-#define SP_REDIR_FD(_fd) \
-    (SP_RedirOpt) { .type = SP_REDIR_FD, .value.fd = (_fd) }
+#define SP_REDIR_FD(_fd)                       \
+    (SP_RedirOpt) {                            \
+        .type = SP_REDIR_FD, .value.fd = (_fd) \
+    }
 
 /**
  * Setup sp_redir_opt to redirect to a byte stream pointed to by _bytes having a size of _size.
@@ -120,15 +130,19 @@ typedef struct sp_redir_opt {
  * Setup sp_redir_opt to redirect stderr to stdout.
  * Only valid for stderr.
  */
-#define SP_REDIR_STDOUT() \
-    (SP_RedirOpt) { .type = SP_REDIR_STDOUT }
+#define SP_REDIR_STDOUT()       \
+    (SP_RedirOpt) {             \
+        .type = SP_REDIR_STDOUT \
+    }
 
 /**
  * Setup sp_redir_opt to redirect stdout to stderr.
  * Only valid for stdout.
  */
-#define SP_REDIR_STDERR() \
-    (SP_RedirOpt) { .type = SP_REDIR_STDERR }
+#define SP_REDIR_STDERR()       \
+    (SP_RedirOpt) {             \
+        .type = SP_REDIR_STDERR \
+    }
 
 /**
  * Redirect the target file descriptor using the given opts.
